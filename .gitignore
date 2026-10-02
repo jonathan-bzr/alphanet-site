@@ -1,0 +1,11 @@
+# Configuration locale de l'éditeur / de Claude (non nécessaire au site)
+.claude/
+
+# Fichiers système
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Divers
+*.log
+node_modules/
