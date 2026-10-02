@@ -14,7 +14,11 @@ Site statique : HTML, CSS et JavaScript, sans dépendance ni outil de compilatio
 
 ## Voir le site
 
-Double-cliquez sur `index.html` : il s'ouvre dans votre navigateur.
+- En ligne (hébergement gratuit GitHub Pages) : https://jonathan-bzr.github.io/alphanet-site/
+- En local : double-cliquez sur `index.html`, il s'ouvre dans votre navigateur.
+
+Chaque envoi de modifications sur la branche `main` du dépôt GitHub met le site
+en ligne à jour automatiquement (en une à deux minutes).
 
 ## Changer les couleurs
 
@@ -36,10 +40,10 @@ Pour mettre la vôtre : copiez-la dans `assets/img/` (par ex. `accueil.jpg`), pu
 
 1. **Adresse e-mail** qui recevra les demandes de devis : dans `assets/js/main.js`,
    remplacer `contact@example.com` (ligne `email: ...`). La reporter aussi dans
-   `mentions-legales.html`, champ « E-mail ».
-2. **Hébergeur** (nom, adresse, téléphone) dans `mentions-legales.html`.
-3. **Médiateur de la consommation**, obligatoire dès que vous travaillez avec des particuliers.
-4. **Relire les textes** : prestations, « 20+ salariés », secteur d'intervention, « devis gratuit ».
+   `mentions-legales.html`, champ « E-mail ». Tant que l'adresse d'exemple est en place,
+   le formulaire invite simplement le visiteur à appeler.
+2. **Médiateur de la consommation**, obligatoire dès que vous travaillez avec des particuliers.
+3. **Relire les textes** : prestations, « 20+ salariés », secteur d'intervention, « devis gratuit ».
 
 Les champs à compléter sont surlignés en jaune dans la page des mentions légales.
 

@@ -190,6 +190,16 @@
 
   if (form) {
     const status = $('[data-form-status]', form);
+    // Tant que l'adresse ci-dessus est l'adresse d'exemple, aucune demande n'est envoyée.
+    const emailReady = !/@example\.(com|fr)$/i.test(CONFIG.email);
+
+    const showStatus = (message, tone) => {
+      if (!status) return;
+      status.hidden = false;
+      status.classList.toggle('form-status--info', tone === 'info');
+      status.innerHTML = `<svg class="ico" aria-hidden="true"><use href="#i-${tone === 'info' ? 'phone' : 'check'}"/></svg><span></span>`;
+      status.lastElementChild.textContent = message;
+    };
 
     const recheck = (event) => {
       if (event.target.closest('.field.is-invalid')) checkField(event.target);
@@ -203,6 +213,11 @@
       const invalid = controls.filter((control) => !checkField(control));
       if (invalid.length) {
         invalid[0].focus();
+        return;
+      }
+
+      if (!emailReady) {
+        showStatus(`L’envoi en ligne n’est pas encore activé. Merci de nous appeler au ${CONFIG.phone}.`, 'info');
         return;
       }
 
@@ -234,12 +249,7 @@
       ].filter((line) => line !== null).join('\r\n');
 
       window.location.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-      if (status) {
-        status.hidden = false;
-        status.innerHTML = '<svg class="ico" aria-hidden="true"><use href="#i-check"/></svg><span></span>';
-        status.lastElementChild.textContent = `Votre messagerie s’ouvre avec la demande pré-remplie : il ne reste plus qu’à l’envoyer. Si rien ne se passe, appelez-nous au ${CONFIG.phone}.`;
-      }
+      showStatus(`Votre messagerie s’ouvre avec la demande pré-remplie : il ne reste plus qu’à l’envoyer. Si rien ne se passe, appelez-nous au ${CONFIG.phone}.`, 'success');
     });
   }
 })();
