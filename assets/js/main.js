@@ -37,42 +37,61 @@
   $$('[data-current-year]').forEach((el) => { el.textContent = String(new Date().getFullYear()); });
 
 
-  /* Menu mobile ------------------------------------------------------------ */
+  /* Menu mobile plein écran ------------------------------------------------ */
+  const header = $('[data-header]');
   const navToggle = $('[data-nav-toggle]');
-  const navPanel = $('[data-nav-panel]');
-  const navBackdrop = $('[data-nav-backdrop]');
+  const menu = $('[data-menu]');
+  const isMenuOpen = () => Boolean(menu && menu.classList.contains('is-open'));
 
-  const setNav = (open) => {
-    if (!navToggle || !navPanel) return;
+  const setMenu = (open) => {
+    if (!navToggle || !menu) return;
     navToggle.setAttribute('aria-expanded', String(open));
     navToggle.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
-    navPanel.classList.toggle('is-open', open);
-    if (navBackdrop) navBackdrop.hidden = !open;
+    menu.classList.toggle('is-open', open);
+    menu.inert = !open;
     document.body.classList.toggle('nav-open', open);
+    if (header) {
+      header.classList.toggle('menu-open', open);
+      header.classList.remove('is-hidden');
+    }
+    if (open) {
+      const firstLink = $('a', menu);
+      if (firstLink) firstLink.focus({ preventScroll: true });
+    }
   };
 
-  if (navToggle && navPanel) {
-    navToggle.addEventListener('click', () => setNav(navToggle.getAttribute('aria-expanded') !== 'true'));
-    navPanel.addEventListener('click', (event) => {
-      if (event.target.closest('a')) setNav(false);
+  if (navToggle && menu) {
+    navToggle.addEventListener('click', () => setMenu(!isMenuOpen()));
+    menu.addEventListener('click', (event) => {
+      if (event.target.closest('a')) setMenu(false);
     });
-    if (navBackdrop) navBackdrop.addEventListener('click', () => setNav(false));
     document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && navToggle.getAttribute('aria-expanded') === 'true') {
-        setNav(false);
+      if (!isMenuOpen()) return;
+      if (event.key === 'Escape') {
+        setMenu(false);
         navToggle.focus();
+        return;
+      }
+      // Garde le focus clavier dans le menu ouvert.
+      if (event.key !== 'Tab') return;
+      const focusables = [navToggle, ...$$('a, button', menu)];
+      const index = focusables.indexOf(document.activeElement);
+      if (event.shiftKey && index <= 0) {
+        event.preventDefault();
+        focusables[focusables.length - 1].focus();
+      } else if (!event.shiftKey && index === focusables.length - 1) {
+        event.preventDefault();
+        focusables[0].focus();
       }
     });
-    window.matchMedia('(min-width: 1080px)').addEventListener('change', () => setNav(false));
+    window.matchMedia('(min-width: 1080px)').addEventListener('change', () => setMenu(false));
   }
 
 
-  /* Lien actif dans le menu selon la section affichée ---------------------- */
-  const navLinks = $$('.nav-list a[href^="#"]');
+  /* Lien actif dans les menus selon la section affichée -------------------- */
+  const navLinks = $$('.nav-list a[href^="#"], .menu-links a[href^="#"]');
   if (navLinks.length && hasObserver) {
-    const sections = ['top', ...navLinks.map((link) => link.hash.slice(1))]
-      .map((id) => document.getElementById(id))
-      .filter(Boolean);
+    const ids = ['top', ...new Set(navLinks.map((link) => link.hash.slice(1)))];
     const spy = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
@@ -82,7 +101,7 @@
         });
       });
     }, { rootMargin: '-40% 0px -55% 0px' });
-    sections.forEach((section) => spy.observe(section));
+    ids.map((id) => document.getElementById(id)).filter(Boolean).forEach((section) => spy.observe(section));
   }
 
 
@@ -102,12 +121,13 @@
   }
 
 
-  /* En-tête, barre d'action mobile et bouton « retour en haut » ------------ */
-  const header = $('[data-header]');
+  /* En-tête, progression, barre mobile et « retour en haut » --------------- */
+  const hero = $('.hero');
   const mobileBar = $('[data-mobile-bar]');
   const toTop = $('[data-to-top]');
   const heroActions = $('[data-hero-actions]');
   const contactSection = $('#contact');
+  let lastY = window.scrollY;
   let ticking = false;
 
   const setShown = (el, shown) => {
@@ -117,12 +137,31 @@
 
   const onScroll = () => {
     ticking = false;
+    const y = window.scrollY;
     const viewport = window.innerHeight;
-    if (header) header.classList.toggle('is-scrolled', window.scrollY > 8);
+
+    if (header) {
+      // Transparent sur la grande photo, blanc une fois celle-ci dépassée.
+      const solidAt = hero ? Math.max(hero.offsetHeight - header.offsetHeight - 40, 40) : 8;
+      header.classList.toggle('is-solid', y > solidAt);
+      header.classList.toggle('is-scrolled', y > 8);
+
+      // Se range quand on descend, revient dès que l'on remonte.
+      const delta = y - lastY;
+      if (Math.abs(delta) > 6) {
+        const keyboardInside = Boolean(header.querySelector(':focus-visible'));
+        const hide = delta > 0 && y > Math.max(solidAt, 320) && !isMenuOpen() && !keyboardInside;
+        header.classList.toggle('is-hidden', hide);
+        lastY = y;
+      }
+
+      const scrollable = document.documentElement.scrollHeight - viewport;
+      header.style.setProperty('--progress', scrollable > 0 ? Math.min(1, y / scrollable).toFixed(4) : '0');
+    }
 
     if (mobileBar) {
       // Visible une fois les boutons du haut dépassés, masquée en arrivant au formulaire.
-      const pastHero = heroActions ? heroActions.getBoundingClientRect().bottom < 0 : window.scrollY > viewport;
+      const pastHero = heroActions ? heroActions.getBoundingClientRect().bottom < 0 : y > viewport;
       const beforeContact = contactSection ? contactSection.getBoundingClientRect().top > viewport * 0.85 : true;
       const shown = pastHero && beforeContact;
       setShown(mobileBar, shown);
@@ -130,7 +169,7 @@
     }
 
     if (toTop) {
-      const shown = window.scrollY > viewport * 1.2;
+      const shown = y > viewport * 1.2;
       toTop.classList.toggle('is-visible', shown);
       toTop.tabIndex = shown ? 0 : -1;
     }
@@ -143,6 +182,7 @@
     requestAnimationFrame(onScroll);
   }, { passive: true });
   window.addEventListener('resize', onScroll);
+  if (header) header.addEventListener('focusin', () => header.classList.remove('is-hidden'));
 
   if (toTop) {
     toTop.addEventListener('click', () => {
@@ -179,7 +219,7 @@
     return !message;
   };
 
-  // Les liens « Demander un devis » des services pré-remplissent le type de prestation.
+  // Les cartes de services pré-remplissent le type de prestation.
   $$('[data-service]').forEach((link) => {
     link.addEventListener('click', () => {
       if (!typeSelect) return;

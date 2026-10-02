@@ -26,15 +26,20 @@ Toutes les couleurs sont regroupées en haut de `assets/css/styles.css`
 (section « 1. Tokens ») : `--blue-600` pour le bleu principal,
 `--navy` pour le bleu marine, `--green-500` pour le vert, etc.
 
-## Remplacer la photo d'accueil
+## Remplacer les photos
 
-La photo actuelle provient d'Unsplash (licence gratuite, crédit dans les mentions légales).
-Pour mettre la vôtre : copiez-la dans `assets/img/` (par ex. `accueil.jpg`), puis dans
-`index.html`, remplacez la balise `<img …>` de la section « Accueil » par :
+Les trois photos (grande photo d'accueil, carte « Bureaux », section « Pourquoi nous »)
+proviennent d'Unsplash (licence gratuite, crédits dans les mentions légales).
+Pour mettre les vôtres : copiez-les dans `assets/img/` (par ex. `accueil.jpg`), puis dans
+`index.html`, remplacez la balise `<img …>` concernée en gardant sa classe. Exemple pour
+la grande photo d'accueil :
 
 ```html
-<img src="assets/img/accueil.jpg" width="1280" height="853" alt="Description de la photo" fetchpriority="high">
+<img class="hero-bg" src="assets/img/accueil.jpg" width="1920" height="1280" alt="Description de la photo" fetchpriority="high">
 ```
+
+Pour la grande photo, préférez une image horizontale et lumineuse (au moins 1920 px de large) :
+un voile bleu foncé est ajouté automatiquement à gauche pour que le titre reste lisible.
 
 ## À compléter avant la mise en ligne
 
