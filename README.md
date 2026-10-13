@@ -32,11 +32,11 @@ et interventions après sinistre, à Montpellier et dans tout l'Hérault.
 
 Une seule page, en cinq parties, pensée pour que les professionnels trouvent vite l'essentiel :
 
-1. **Accueil** : grand fond lumineux, titre, devis et téléphone en un clic.
+1. **Accueil** : grand fond lumineux, titre, devis et téléphone en un clic, et une carte « Alphanet en bref » avec quatre chiffres.
 2. **Services** : six prestations. Un clic sur une carte ouvre le formulaire avec la prestation déjà choisie.
 3. **Méthode** : quatre étapes, du premier rendez-vous au suivi qualité.
 4. **Partenaires** : bandeau qui défile en continu (pause au survol ou avec le bouton).
-5. **Contact** : téléphone et formulaire de devis.
+5. **Contact** : téléphone, zone d'intervention (communes de l'Hérault) et formulaire de devis.
 
 Et aussi : **mode clair / sombre** (bouton lune / soleil en haut, suit le réglage de l'appareil par
 défaut), menu et barre « Appeler / Devis » sur téléphone, page **mentions légales et données personnelles**.
@@ -82,6 +82,11 @@ Site statique en HTML, CSS et JavaScript, sans dépendance ni outil de compilati
   <li class="partner"><img src="assets/img/partenaires/nom.svg" alt="Nom du partenaire" height="40"></li>
   ```
 
+- **Chiffres de l'accueil** : dans `index.html`, bloc « Alphanet en bref ». Le chiffre des années
+  d'expérience se met à jour tout seul chaque année (date de création : 10 avril 2014). Ne mettre que
+  des chiffres exacts ; pour en ajouter (nombre de sites entretenus, d'agents...), copier un
+  `<li class="stat">`.
+- **Communes de la zone d'intervention** : dans `index.html`, section Contact, une ligne `<li>` par commune.
 - **Adresse e-mail du formulaire** : dans `assets/js/main.js`, remplir `emailUser` (avant le @) et
   `emailDomain` (après le @), puis la reporter dans `mentions-legales.html`. Tant qu'elle est vide,
   le formulaire invite le visiteur à appeler.
@@ -100,6 +105,8 @@ en une à deux minutes.
 
 - [ ] Adresse e-mail de contact (formulaire de devis et mentions légales)
 - [ ] Vrais partenaires (noms et logos) à la place des noms provisoires
+- [ ] Certifications éventuelles (ISO 9001, Qualipropre, FEP...), à afficher avec leur logo officiel
+- [ ] Chiffres supplémentaires exacts (sites entretenus, agents, clients) et photos réelles des interventions
 - [ ] Médiateur de la consommation (obligatoire pour les clients particuliers)
 - [ ] Vérifier que la raison sociale et le SIREN des mentions légales sont toujours à jour
 

@@ -154,6 +154,39 @@
   }
 
 
+  /* Chiffres clés : comptent jusqu'à leur valeur quand ils apparaissent ----- */
+  // Le chiffre des années d'expérience est recalculé à partir de la date de création.
+  const yearsSince = (isoDate) => {
+    const [y, m, d] = isoDate.split('-').map(Number);
+    const now = new Date();
+    let years = now.getFullYear() - y;
+    if (now < new Date(now.getFullYear(), m - 1, d)) years -= 1;
+    return years;
+  };
+  const counters = $$('[data-count]');
+  counters.forEach((el) => {
+    const since = el.getAttribute('data-count-since');
+    const target = since ? yearsSince(since) : Number(el.getAttribute('data-count'));
+    if (!Number.isFinite(target)) return;
+    el.textContent = String(target);
+    if (!hasObserver || reduceMotion || target < 2) return;
+    el.textContent = '0';
+    const counter = new IntersectionObserver((entries, observer) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      observer.disconnect();
+      const duration = 1100;
+      const start = performance.now();
+      const tick = (now) => {
+        const progress = Math.min(1, (now - start) / duration);
+        el.textContent = String(Math.round(target * (1 - Math.pow(1 - progress, 3))));
+        if (progress < 1) window.requestAnimationFrame(tick);
+      };
+      window.requestAnimationFrame(tick);
+    }, { threshold: 0.6 });
+    counter.observe(el);
+  });
+
+
   /* Bandeau défilant des partenaires -------------------------------------- */
   // La liste est écrite une seule fois dans la page ; le script la recopie
   // autant de fois que nécessaire pour un défilement continu, sans à-coup.

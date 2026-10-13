@@ -49,6 +49,7 @@
   --header-bg: rgb(255 255 255 / .82);
   --chip-bg: rgb(255 255 255 / .62);
   --chip-border: rgb(255 255 255 / .9);
+  --card-glass: rgb(255 255 255 / .74);
   --hero-veil: linear-gradient(100deg, rgb(238 242 248 / .78) 0%, rgb(238 242 248 / .35) 42%, rgb(238 242 248 / 0) 68%);
   --hero-veil-narrow: linear-gradient(180deg, rgb(238 242 248 / .45) 0%, rgb(238 242 248 / .2) 100%);
   --grain-opacity: .07;
@@ -68,7 +69,7 @@
   --header-h: 76px;
   --gutter: clamp(1.25rem, 4vw, 2.5rem);
   --container: 1160px;
-  --section-y: clamp(4.5rem, 3rem + 6vw, 7.5rem);
+  --section-y: clamp(4rem, 2.6rem + 5.4vw, 6.75rem);
   --ease: cubic-bezier(.2, .7, .2, 1);
 
   color-scheme: light;
@@ -102,6 +103,7 @@
   --header-bg: rgb(10 17 30 / .78);
   --chip-bg: rgb(17 27 44 / .8);
   --chip-border: rgb(122 167 255 / .18);
+  --card-glass: rgb(17 27 44 / .78);
   --hero-veil: linear-gradient(100deg, rgb(7 13 24 / .72) 0%, rgb(7 13 24 / .3) 45%, rgb(7 13 24 / 0) 70%);
   --hero-veil-narrow: linear-gradient(180deg, rgb(7 13 24 / .5) 0%, rgb(7 13 24 / .42) 55%, rgb(7 13 24 / .2) 100%);
   --grain-opacity: .09;
@@ -179,7 +181,16 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .section { padding-block: var(--section-y); }
 .section--soft { background: var(--bg-soft); }
 
-.section-head { max-width: 44rem; margin-bottom: clamp(2.5rem, 2rem + 2vw, 3.5rem); }
+.section-head { max-width: 44rem; margin-bottom: clamp(2.25rem, 1.8rem + 2vw, 3.25rem); }
+/* Sur ordinateur : titre à gauche, texte d'introduction à droite (moins de blanc, moins de défilement) */
+@media (min-width: 900px) {
+  .section-head {
+    max-width: none; display: grid; align-items: end;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); column-gap: clamp(2.5rem, 6vw, 5rem);
+  }
+  .section-head .eyebrow { grid-column: 1 / -1; justify-self: start; }
+  .section-head .lead { margin-top: 0; padding-bottom: .3rem; }
+}
 .eyebrow {
   display: inline-flex; align-items: center; gap: .6rem;
   margin-bottom: 1rem;
@@ -348,6 +359,39 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 
 .hero-content { max-width: 50rem; }
+.hero-grid { display: grid; gap: 2.75rem; align-items: center; }
+@media (min-width: 1100px) {
+  .hero-grid { grid-template-columns: minmax(0, 1fr) 21.5rem; gap: 3.5rem; }
+}
+
+/* Carte « Alphanet en bref » : quatre chiffres vrais, lisibles en un coup d'œil */
+.hero-card {
+  padding: 1.5rem 1.6rem 1.7rem;
+  border: 1px solid var(--chip-border); border-radius: var(--radius-lg);
+  background: var(--card-glass);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  box-shadow: var(--shadow-lg);
+}
+.hero-card-title {
+  display: flex; align-items: center; gap: .6rem; margin-bottom: 1.25rem;
+  color: var(--text-3); font-size: .78rem; font-weight: 750; letter-spacing: .16em; text-transform: uppercase;
+}
+.hero-card-title::before { content: ""; width: 22px; height: 2px; border-radius: 2px; background: var(--accent); }
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem 1.25rem; }
+.stat { display: flex; flex-direction: column; gap: .3rem; min-width: 0; }
+.stat-num {
+  color: var(--primary); font-size: clamp(2.2rem, 1.7rem + 1.6vw, 2.9rem);
+  font-weight: 800; line-height: 1; letter-spacing: -.03em; font-variant-numeric: tabular-nums;
+}
+.stat-unit { font-size: .5em; font-weight: 750; letter-spacing: 0; color: var(--text); }
+.stat-label { color: var(--text-2); font-size: .92rem; font-weight: 600; line-height: 1.4; text-wrap: balance; }
+@media (min-width: 1100px) {
+  .stats { gap: 1.9rem 1.25rem; }
+}
+/* Tablette : les quatre chiffres sur une ligne sous le texte */
+@media (min-width: 700px) and (max-width: 1099px) {
+  .stats { grid-template-columns: repeat(4, 1fr); }
+}
 .hero-eyebrow {
   display: inline-flex; align-items: center; gap: .6rem;
   margin-bottom: 1.6rem; padding: .45rem .95rem;
@@ -373,6 +417,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .hero-eyebrow { font-size: .8rem; }
   .hero-actions .btn { width: 100%; }
   .hero-points { flex-direction: column; }
+  .hero-card { padding: 1.25rem 1.25rem 1.4rem; }
+  .stats { gap: 1.25rem 1rem; }
 }
 
 /* Léger effet de profondeur au défilement (navigateurs compatibles uniquement) */
@@ -507,6 +553,15 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .contact-facts { display: grid; gap: .7rem; margin-top: 2rem; color: var(--text-2); font-weight: 560; }
 .contact-facts li { display: flex; align-items: center; gap: .65rem; }
 .contact-facts .ico { color: var(--accent-ink); width: 20px; height: 20px; }
+.zone { margin-top: 2rem; }
+.zone-title { display: flex; align-items: center; gap: .65rem; color: var(--text); font-weight: 720; }
+.zone-title .ico { color: var(--accent-ink); width: 20px; height: 20px; }
+.zone-list { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .9rem; padding: 0; list-style: none; }
+.zone-list li {
+  padding: .32rem .85rem; border: 1px solid var(--border-strong); border-radius: 999px;
+  background: var(--chip-bg); color: var(--text-2); font-size: .9rem; font-weight: 620;
+}
+.zone-list .zone-all { border-color: transparent; background: var(--primary-soft); color: var(--primary); font-weight: 720; }
 
 .form-card {
   padding: clamp(1.5rem, 1rem + 2.2vw, 2.6rem);
