@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ALPHANET SOCIÉTÉ SERVICE — Thème, navigation, partenaires, formulaire
+   ALPHANET SOCIÉTÉ SERVICE — Thème, navigation, chiffres clés, formulaire
    --------------------------------------------------------------------------
    Aucun framework ni service extérieur. Les animations sont coupées si le
    visiteur a demandé à réduire les animations dans les réglages de son appareil.
@@ -16,7 +16,7 @@
     emailUser: '',
     emailDomain: '',
   };
-  const THEME_COLORS = { light: '#e4eaf2', dark: '#0a111e' };
+  const THEME_COLORS = { light: '#e8f3fd', dark: '#0c1a30' };
   const THEME_KEY = 'alphanet-theme';
   const SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -52,14 +52,6 @@
       try { window.localStorage.setItem(THEME_KEY, next); } catch (error) { /* choix non mémorisé */ }
       if (document.startViewTransition && !reduceMotion) document.startViewTransition(() => applyTheme(next));
       else applyTheme(next);
-    });
-  }
-
-  // Tant que le visiteur n'a rien choisi, le site suit le réglage de son appareil.
-  const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
-  if (systemDark.addEventListener) {
-    systemDark.addEventListener('change', (event) => {
-      if (!savedTheme()) applyTheme(event.matches ? 'dark' : 'light');
     });
   }
 
@@ -119,25 +111,6 @@
   }
 
 
-  /* Lien actif dans le menu selon la section affichée ---------------------- */
-  const navLinks = $$('.nav-list a[href^="#"]');
-  if (navLinks.length && hasObserver) {
-    const spy = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        navLinks.forEach((link) => {
-          if (link.hash === `#${entry.target.id}`) link.setAttribute('aria-current', 'location');
-          else link.removeAttribute('aria-current');
-        });
-      });
-    }, { rootMargin: '-45% 0px -50% 0px' });
-    ['top', ...navLinks.map((link) => link.hash.slice(1))]
-      .map((id) => document.getElementById(id))
-      .filter(Boolean)
-      .forEach((section) => spy.observe(section));
-  }
-
-
   /* Apparition douce des blocs au défilement ------------------------------ */
   const revealTargets = $$('.reveal');
   if (hasObserver && !reduceMotion) {
@@ -187,63 +160,9 @@
   });
 
 
-  /* Bandeau défilant des partenaires -------------------------------------- */
-  // La liste est écrite une seule fois dans la page ; le script la recopie
-  // autant de fois que nécessaire pour un défilement continu, sans à-coup.
-  const marquee = $('[data-marquee]');
-  const marqueeList = marquee ? $('[data-marquee-list]', marquee) : null;
-  const marqueeToggle = $('[data-marquee-toggle]');
-
-  if (marquee && marqueeList && !reduceMotion) {
-    const track = document.createElement('div');
-    track.className = 'marquee-track';
-    marqueeList.before(track);
-    track.append(marqueeList);
-    marquee.classList.add('is-ready');
-
-    const build = () => {
-      $$('[data-marquee-clone]', track).forEach((clone) => clone.remove());
-      const width = marqueeList.getBoundingClientRect().width;
-      if (!width) return;
-      const copies = Math.ceil(marquee.clientWidth / width) + 1;
-      for (let i = 0; i < copies; i += 1) {
-        const clone = marqueeList.cloneNode(true);
-        clone.removeAttribute('data-marquee-list');
-        clone.setAttribute('data-marquee-clone', '');
-        clone.setAttribute('aria-hidden', 'true');
-        clone.inert = true;
-        track.append(clone);
-      }
-      track.style.setProperty('--marquee-shift', `${width}px`);
-      track.style.setProperty('--marquee-duration', `${Math.max(20, Math.round(width / 42))}s`);
-    };
-
-    build();
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(build);
-    window.addEventListener('load', build); // logos en image : largeur connue une fois chargés
-    let resizeTimer = 0;
-    let lastWidth = window.innerWidth;
-    window.addEventListener('resize', () => {
-      if (window.innerWidth === lastWidth) return; // ignore la barre d'adresse mobile
-      lastWidth = window.innerWidth;
-      window.clearTimeout(resizeTimer);
-      resizeTimer = window.setTimeout(build, 200);
-    });
-
-    if (marqueeToggle) {
-      marqueeToggle.hidden = false;
-      marqueeToggle.addEventListener('click', () => {
-        const paused = marquee.classList.toggle('is-paused');
-        marqueeToggle.setAttribute('aria-pressed', String(paused));
-      });
-    }
-  }
-
-
   /* En-tête et barre d'action mobile au défilement ------------------------ */
   const mobileBar = $('[data-mobile-bar]');
   const heroActions = $('[data-hero-actions]');
-  const contactSection = $('#contact');
   let ticking = false;
 
   const onScroll = () => {
@@ -251,11 +170,10 @@
     if (header) header.classList.toggle('is-scrolled', window.scrollY > 8);
 
     if (mobileBar) {
-      // Visible une fois les boutons de l'accueil dépassés, masquée en arrivant au formulaire.
+      // Visible une fois les boutons de l'accueil dépassés (ou un peu plus bas sur les autres pages).
       const viewport = window.innerHeight;
-      const pastHero = heroActions ? heroActions.getBoundingClientRect().bottom < 0 : window.scrollY > viewport;
-      const beforeContact = contactSection ? contactSection.getBoundingClientRect().top > viewport * 0.85 : true;
-      const shown = pastHero && beforeContact && !isMenuOpen();
+      const pastTop = heroActions ? heroActions.getBoundingClientRect().bottom < 0 : window.scrollY > viewport * 0.6;
+      const shown = pastTop && !isMenuOpen();
       mobileBar.classList.toggle('is-visible', shown);
       mobileBar.inert = !shown;
     }
@@ -299,14 +217,19 @@
     return !message;
   };
 
-  // Les cartes de services pré-remplissent la prestation.
-  $$('[data-service]').forEach((link) => {
-    link.addEventListener('click', () => {
-      if (!typeSelect) return;
-      typeSelect.value = link.dataset.service;
-      if (typeSelect.closest('.field.is-invalid')) checkField(typeSelect);
-    });
-  });
+  // Les pages de services renvoient ici avec ?prestation=... : la prestation est alors pré-remplie.
+  const PRESTATIONS = {
+    'bureaux': 'Bureaux / locaux professionnels',
+    'coproprietes': 'Copropriété / parties communes',
+    'commerces': 'Commerce / lieu recevant du public',
+    'vitrerie': 'Vitrerie',
+    'remise-en-etat': 'Remise en état / fin de chantier',
+    'apres-sinistre': 'Intervention après sinistre',
+  };
+  if (typeSelect) {
+    const wanted = new URLSearchParams(window.location.search).get('prestation');
+    if (wanted && Object.prototype.hasOwnProperty.call(PRESTATIONS, wanted)) typeSelect.value = PRESTATIONS[wanted];
+  }
 
   if (form) {
     const status = $('[data-form-status]', form);

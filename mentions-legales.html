@@ -12,20 +12,21 @@
   <meta name="robots" content="noindex, follow">
   <link rel="canonical" href="https://jonathan-bzr.github.io/alphanet-site/mentions-legales.html">
   <meta name="color-scheme" content="light dark">
-  <meta name="theme-color" content="#e4eaf2" data-theme-color>
+  <meta name="theme-color" content="#e8f3fd" data-theme-color>
 
   <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
   <link rel="preload" href="assets/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
   <!-- Le numéro ?v= force le rechargement après chaque mise à jour : à augmenter quand le CSS ou le JS change -->
-  <link rel="stylesheet" href="assets/css/styles.css?v=20261013-2">
-  <script src="assets/js/theme.js?v=20261013-2"></script>
-  <script src="assets/js/main.js?v=20261013-2" defer></script>
+  <link rel="stylesheet" href="assets/css/styles.css?v=20261014-1">
+  <script src="assets/js/theme.js?v=20261014-1"></script>
+  <script src="assets/js/main.js?v=20261014-1" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#contenu">Aller au contenu</a>
 
+  <!-- Logo et pictogrammes partagés -->
   <svg class="svg-sprite" aria-hidden="true" focusable="false">
     <defs>
       <linearGradient id="g-brand" x1="10" y1="6" x2="56" y2="58" gradientUnits="userSpaceOnUse">
@@ -36,34 +37,50 @@
         <path fill="url(#g-brand)" stroke="url(#g-brand)" fill-rule="evenodd" stroke-width="4" stroke-linejoin="round" d="M32 7 56.5 56H43L32 47 21 56H7.5ZM32 18.5s-8.3 10.2-8.3 15.6a8.3 8.3 0 0 0 16.6 0c0-5.4-8.3-15.6-8.3-15.6Z"/>
         <path class="brand-spark" d="M53 3.6q1.1 5.4 6.4 6.5-5.3 1.1-6.4 6.5-1.1-5.4-6.5-6.5 5.4-1.1 6.5-6.5Z"/>
       </symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
       <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6.6 3.5h2.9l1.6 4.1-2.1 1.4a11 11 0 0 0 6 6l1.4-2.1 4.1 1.6v2.9a2 2 0 0 1-2.2 2A16 16 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2z"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
       <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.1-7-11.4a7 7 0 0 1 14 0C19 14.9 12 21 12 21z"/><circle cx="12" cy="9.6" r="2.6"/></symbol>
       <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6 6 6M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></symbol>
       <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></symbol>
       <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
       <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+      <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.6 3.1 8 7.5 9.5 4.4-1.5 7.5-4.9 7.5-9.5V6z"/><path d="M8.8 12l2.4 2.4 4-4.4"/></symbol>
+      <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19c.5-3.2 2.7-5 5.5-5s5 1.8 5.5 5"/><circle cx="17" cy="9.5" r="2.5"/><path d="M16 14.2c2.7-.2 4.5 1.3 5 4.3"/></symbol>
+      <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5 19c0-8 4.5-13 14-14 0 9.5-5 14-13 14"/><path d="M5 19c2-4 4.5-6.5 8-8.5"/></symbol>
+      <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/></symbol>
+      <!-- Services -->
+      <symbol id="i-office" viewBox="0 0 24 24"><rect x="4.5" y="3" width="15" height="18" rx="2"/><path d="M8.5 7h1.5M14 7h1.5M8.5 11h1.5M14 11h1.5M8.5 15h1.5M14 15h1.5M10 21v-2.5h4V21"/></symbol>
+      <symbol id="i-copro" viewBox="0 0 24 24"><path d="M3 21h18M5 21V8.5l6-4V21M11 21V10l8 3v8M7.8 9.5v.01M7.8 13v.01M7.8 16.5v.01M15 15.5v.01M15 18.5v.01"/></symbol>
+      <symbol id="i-store" viewBox="0 0 24 24"><path d="M4.5 10.5V20h15v-9.5M3 9.5 4.6 4h14.8L21 9.5a3 3 0 0 1-6 0 3 3 0 0 1-6 0 3 3 0 0 1-6 0zM10 20v-4.5h4V20"/></symbol>
+      <symbol id="i-window" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M12 3v18M4 12h16M7 8.5l2-2M15 17.5l2-2"/></symbol>
+      <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M10.5 3.5 12.3 8.2 17 10l-4.7 1.8-1.8 4.7-1.8-4.7L4 10l4.7-1.8zM18 14.5l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z"/></symbol>
+      <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 3s-6 6.6-6 11a6 6 0 0 0 12 0c0-4.4-6-11-6-11z"/><path d="M9.2 14.6a2.9 2.9 0 0 0 2.8 2.7"/></symbol>
     </defs>
   </svg>
 
+  <!-- ================================================================
+       En-tête
+       ================================================================ -->
   <header class="site-header" data-header>
     <div class="container header-inner">
-      <a class="brand" href="index.html" aria-label="Alphanet Société Service, page d’accueil">
+      <a class="brand" href="index.html" aria-label="Alphanet Société Service, accueil">
         <svg class="brand-mark" aria-hidden="true"><use href="#logo-mark"/></svg>
         <span class="brand-text" aria-hidden="true">
           <span class="brand-name">Alphanet</span>
           <span class="brand-sub">Société Service</span>
         </span>
       </a>
-
       <nav class="nav" aria-label="Navigation principale">
         <ul class="nav-list">
-          <li><a href="index.html#services">Services</a></li>
-          <li><a href="index.html#methode">Méthode</a></li>
-          <li><a href="index.html#partenaires">Partenaires</a></li>
-          <li><a href="index.html#contact">Contact</a></li>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="entreprise.html">Entreprise</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="engagements.html">Engagements</a></li>
+          <li><a href="contact.html">Contact</a></li>
         </ul>
       </nav>
-
       <div class="header-actions">
         <a class="header-phone" href="tel:+33758340407" aria-label="Appeler le 07 58 34 04 07">
           <svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg>
@@ -73,24 +90,25 @@
           <svg class="ico ico-moon" aria-hidden="true"><use href="#i-moon"/></svg>
           <svg class="ico ico-sun" aria-hidden="true"><use href="#i-sun"/></svg>
         </button>
-        <a class="btn btn-primary btn-sm header-cta" href="index.html#contact">Devis gratuit</a>
+        <a class="btn btn-primary btn-sm header-cta" href="contact.html#formulaire">Devis gratuit</a>
         <button class="icon-btn nav-toggle" type="button" aria-expanded="false" aria-controls="menu" aria-label="Ouvrir le menu" data-nav-toggle>
           <svg class="ico ico-menu" aria-hidden="true"><use href="#i-menu"/></svg>
           <svg class="ico ico-close" aria-hidden="true"><use href="#i-close"/></svg>
         </button>
       </div>
     </div>
-
+    <!-- Menu sur téléphone et tablette -->
     <div class="menu" id="menu" data-menu inert>
       <nav class="container" aria-label="Menu">
         <ul class="menu-list">
-          <li><a href="index.html#services">Services</a></li>
-          <li><a href="index.html#methode">Méthode</a></li>
-          <li><a href="index.html#partenaires">Partenaires</a></li>
-          <li><a href="index.html#contact">Contact</a></li>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="entreprise.html">Entreprise</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="engagements.html">Engagements</a></li>
+          <li><a href="contact.html">Contact</a></li>
         </ul>
         <div class="menu-actions">
-          <a class="btn btn-primary btn-lg" href="index.html#contact">Demander un devis gratuit</a>
+          <a class="btn btn-primary btn-lg" href="contact.html#formulaire">Demander un devis gratuit</a>
           <a class="btn btn-ghost btn-lg" href="tel:+33758340407"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg>07&nbsp;58&nbsp;34&nbsp;04&nbsp;07</a>
         </div>
       </nav>
@@ -107,6 +125,7 @@
         <h1 class="h2" id="legal-title">Mentions légales et données personnelles</h1>
         <p class="lead">Informations sur l’éditeur et l’hébergeur du site (loi n°&nbsp;2004-575 du 21&nbsp;juin 2004, dite LCEN), et sur la manière dont vos données sont protégées (Règlement général sur la protection des données, RGPD).</p>
       </div>
+      <svg class="wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M0 50C200 82 420 82 620 52S1040 6 1240 30s160 22 200 16V80H0Z"/></svg>
     </section>
 
     <div class="container">
@@ -159,7 +178,7 @@
 
         <section class="legal-section" aria-labelledby="propriete">
           <h2 id="propriete">Propriété intellectuelle</h2>
-          <p>Les textes, le logo, les illustrations et la mise en page de ce site sont la propriété d’Alphanet Société Service, sauf mention contraire. Toute reproduction ou représentation, totale ou partielle, sans autorisation écrite préalable est interdite. Les noms et marques des partenaires appartiennent à leurs propriétaires respectifs.</p>
+          <p>Les textes, le logo, les illustrations et la mise en page de ce site sont la propriété d’Alphanet Société Service, sauf mention contraire. Toute reproduction ou représentation, totale ou partielle, sans autorisation écrite préalable est interdite.</p>
         </section>
 
         <section class="legal-section" aria-labelledby="mediation">
@@ -176,10 +195,44 @@
     </div>
   </main>
 
-  <footer class="site-footer site-footer--simple">
+  <!-- ================================================================
+       Pied de page
+       ================================================================ -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <a class="brand" href="index.html" aria-label="Alphanet Société Service, accueil">
+          <svg class="brand-mark" aria-hidden="true"><use href="#logo-mark"/></svg>
+          <span class="brand-text" aria-hidden="true">
+            <span class="brand-name">Alphanet</span>
+            <span class="brand-sub">Société Service</span>
+          </span>
+        </a>
+        <p>Nettoyage professionnel de bureaux, copropriétés et commerces à Montpellier et dans l’Hérault, depuis 2014.</p>
+      </div>
+
+      <nav class="footer-nav" aria-label="Plan du site">
+        <p class="footer-title">Le site</p>
+        <ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="entreprise.html">Entreprise</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="engagements.html">Engagements</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="footer-contact">
+        <p class="footer-title">Contact</p>
+        <a href="tel:+33758340407"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg>07&nbsp;58&nbsp;34&nbsp;04&nbsp;07</a>
+        <p><svg class="ico" aria-hidden="true"><use href="#i-pin"/></svg>Montpellier et tout l’Hérault</p>
+        <a href="contact.html#formulaire"><svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg>Demander un devis gratuit</a>
+      </div>
+    </div>
+
     <div class="container footer-bottom">
       <p>© <span data-current-year>2026</span> Alphanet Société Service</p>
-      <p><a href="index.html">Retour à l’accueil</a><span aria-hidden="true"> · </span><a href="tel:+33758340407">07&nbsp;58&nbsp;34&nbsp;04&nbsp;07</a></p>
+      <p><a href="mentions-legales.html">Mentions légales</a><span aria-hidden="true"> · </span><a href="mentions-legales.html#donnees">Données personnelles</a></p>
     </div>
   </footer>
 </body>

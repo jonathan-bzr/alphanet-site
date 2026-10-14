@@ -30,16 +30,18 @@ et interventions après sinistre, à Montpellier et dans tout l'Hérault.
 
 ## Le site en bref
 
-Une seule page, en cinq parties, pensée pour que les professionnels trouvent vite l'essentiel :
+Cinq pages, un menu en haut de chaque page (sur téléphone : bouton « menu » et barre « Appeler / Devis ») :
 
-1. **Accueil** : grand fond lumineux, titre, devis et téléphone en un clic, et une carte « Alphanet en bref » avec quatre chiffres.
-2. **Services** : six prestations. Un clic sur une carte ouvre le formulaire avec la prestation déjà choisie.
-3. **Méthode** : quatre étapes, du premier rendez-vous au suivi qualité.
-4. **Partenaires** : bandeau qui défile en continu (pause au survol ou avec le bouton).
-5. **Contact** : téléphone, zone d'intervention (communes de l'Hérault) et formulaire de devis.
+| Page | Contenu |
+|---|---|
+| **Accueil** (`index.html`) | Titre, devis et téléphone en un clic, chiffres clés, mission et valeurs, aperçu des six services et des engagements |
+| **Entreprise** (`entreprise.html`) | Histoire, mission, valeurs, méthode de travail, zone d'intervention |
+| **Services** (`services.html`) | Les six prestations en détail : bureaux, copropriétés, commerces, vitrerie, remise en état, après sinistre |
+| **Engagements** (`engagements.html`) | Service suivi, équipes stables, environnement, confidentialité |
+| **Contact** (`contact.html`) | Téléphone, étapes après la demande, formulaire de devis (la prestation se pré-remplit depuis la page Services) |
 
-Et aussi : **mode clair / sombre** (bouton lune / soleil en haut, suit le réglage de l'appareil par
-défaut), menu et barre « Appeler / Devis » sur téléphone, page **mentions légales et données personnelles**.
+Et aussi : **mode clair / sombre** (bouton lune / soleil en haut ; le site s'ouvre en clair) et la page
+**mentions légales et données personnelles**.
 
 ## Sécurité et données personnelles
 
@@ -59,11 +61,12 @@ défaut), menu et barre « Appeler / Devis » sur téléphone, page **mentions l
 
 | Fichier | Rôle |
 |---|---|
-| `index.html` | Page d'accueil |
+| `index.html`, `entreprise.html`, `services.html`, `engagements.html`, `contact.html` | Les cinq pages |
 | `mentions-legales.html` | Mentions légales, données personnelles, cookies |
-| `assets/css/styles.css` | Couleurs (clair et sombre), mise en page |
+| `sitemap.xml` | Liste des pages pour les moteurs de recherche |
+| `assets/css/styles.css` | Couleurs (clair et sombre), formes, mise en page |
 | `assets/js/theme.js` | Applique le mode clair / sombre avant l'affichage |
-| `assets/js/main.js` | Mode sombre, menu, bandeau des partenaires, formulaire |
+| `assets/js/main.js` | Mode sombre, menu, chiffres clés, formulaire |
 | `assets/fonts/` | Police Plus Jakarta Sans (licence libre OFL) |
 | `assets/img/fond/` | Fonds d'image (version claire et sombre, ordinateur et téléphone) |
 | `assets/img/logo/` | Logo : couleur, blanc (fonds foncés), pictogramme, PNG |
@@ -71,28 +74,23 @@ défaut), menu et barre « Appeler / Devis » sur téléphone, page **mentions l
 | `.nojekyll` | Publie les fichiers tels quels sur GitHub Pages |
 
 Site statique en HTML, CSS et JavaScript, sans dépendance ni outil de compilation.
+Le menu et le pied de page sont écrits dans chaque page : pour les changer, modifier les six fichiers `.html`.
 
 ## Modifier le site
 
-- **Partenaires** : dans `index.html`, section « Partenaires », un `<li class="partner">` par
-  partenaire. Les cinq noms après Atout-Box sont **provisoires**. Pour mettre un vrai logo, copier
-  le fichier dans `assets/img/partenaires/` puis écrire :
-
-  ```html
-  <li class="partner"><img src="assets/img/partenaires/nom.svg" alt="Nom du partenaire" height="40"></li>
-  ```
-
-- **Chiffres de l'accueil** : dans `index.html`, bloc « Alphanet en bref ». Le chiffre des années
-  d'expérience se met à jour tout seul chaque année (date de création : 10 avril 2014). Ne mettre que
-  des chiffres exacts ; pour en ajouter (nombre de sites entretenus, d'agents...), copier un
-  `<li class="stat">`.
-- **Communes de la zone d'intervention** : dans `index.html`, section Contact, une ligne `<li>` par commune.
+- **Textes** : directement dans les fichiers `.html` (un titre = une balise `<h2>` ou `<h3>`).
+- **Chiffres de l'accueil** : bloc « Alphanet en bref » (accueil et page Entreprise). Le chiffre des
+  années d'expérience se met à jour tout seul chaque année (date de création : 10 avril 2014). Ne mettre
+  que des chiffres exacts.
+- **Communes de la zone d'intervention** : pages Entreprise et Contact, une ligne `<li>` par commune.
 - **Adresse e-mail du formulaire** : dans `assets/js/main.js`, remplir `emailUser` (avant le @) et
   `emailDomain` (après le @), puis la reporter dans `mentions-legales.html`. Tant qu'elle est vide,
   le formulaire invite le visiteur à appeler.
 - **Couleurs** : en haut de `assets/css/styles.css` (section « 2. Couleurs ») : `--primary` pour le
   bleu, `--accent` pour la touche turquoise ; la deuxième liste concerne le mode sombre.
-- **Après chaque modification du CSS ou du JS** : augmenter le numéro `?v=` dans les deux pages
+- **Formes** : `.chip-drop` (pastille en forme de goutte) et `.bulle` (cadre au coin pointu, avec une étincelle)
+  dans `assets/css/styles.css`. À utiliser avec modération.
+- **Après chaque modification du CSS ou du JS** : augmenter le numéro `?v=` dans les six pages
   HTML, pour que les navigateurs prennent la nouvelle version.
 
 ## Mise en ligne
@@ -104,7 +102,7 @@ en une à deux minutes.
 ## À compléter
 
 - [ ] Adresse e-mail de contact (formulaire de devis et mentions légales)
-- [ ] Vrais partenaires (noms et logos) à la place des noms provisoires
+- [ ] Relire les textes des pages (histoire, valeurs, détail des services, engagements) et corriger ce qui ne correspond pas à la réalité
 - [ ] Certifications éventuelles (ISO 9001, Qualipropre, FEP...), à afficher avec leur logo officiel
 - [ ] Chiffres supplémentaires exacts (sites entretenus, agents, clients) et photos réelles des interventions
 - [ ] Médiateur de la consommation (obligatoire pour les clients particuliers)
