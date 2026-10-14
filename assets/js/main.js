@@ -30,7 +30,7 @@
 
 
   /* Mode clair / sombre ---------------------------------------------------- */
-  const themeToggle = $('[data-theme-toggle]');
+  const themeToggles = $$('[data-theme-toggle]');
   const themeMeta = $('[data-theme-color]');
   const savedTheme = () => {
     try { return window.localStorage.getItem(THEME_KEY); } catch (error) { return null; }
@@ -39,21 +39,22 @@
   const applyTheme = (theme) => {
     root.setAttribute('data-theme', theme);
     if (themeMeta) themeMeta.setAttribute('content', THEME_COLORS[theme]);
-    if (themeToggle) {
-      themeToggle.setAttribute('aria-label', 'Mode sombre');
-      themeToggle.setAttribute('aria-pressed', String(theme === 'dark'));
-    }
   };
   applyTheme(root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
 
-  if (themeToggle) {
-    themeToggle.addEventListener('click', () => {
+  // Le bouton est dans le pied de page et dans le menu mobile : tous font la même chose.
+  themeToggles.forEach((toggle) => {
+    toggle.addEventListener('click', () => {
       const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
       try { window.localStorage.setItem(THEME_KEY, next); } catch (error) { /* choix non mémorisé */ }
       if (document.startViewTransition && !reduceMotion) document.startViewTransition(() => applyTheme(next));
       else applyTheme(next);
     });
-  }
+  });
+  // Un choix fait dans un autre onglet du site est repris ici.
+  window.addEventListener('storage', (event) => {
+    if (event.key === THEME_KEY) applyTheme(event.newValue === 'dark' ? 'dark' : 'light');
+  });
 
 
   /* Menu sur téléphone et tablette ----------------------------------------- */
@@ -67,6 +68,7 @@
     navToggle.setAttribute('aria-expanded', String(open));
     navToggle.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
     menu.classList.toggle('is-open', open);
+    root.classList.toggle('menu-lock', open);
     menu.inert = !open;
     if (header) header.classList.toggle('menu-open', open);
     if (open) {
@@ -107,6 +109,10 @@
     });
     window.matchMedia('(min-width: 1080px)').addEventListener('change', (event) => {
       if (event.matches) setMenu(false);
+    });
+    // Retour arrière : la page peut revenir de la mémoire du navigateur avec le menu resté ouvert.
+    window.addEventListener('pageshow', (event) => {
+      if (event.persisted) setMenu(false);
     });
   }
 
@@ -269,7 +275,10 @@
       }
 
       const data = new FormData(form);
-      const field = (name) => String(data.get(name) || '').trim();
+      // Retire les caractères de contrôle (dont les retours à la ligne, sauf dans le message) : rien ne peut être glissé dans l'objet de l'e-mail.
+      const field = (name) => String(data.get(name) || '')
+        .replace(name === 'message' ? /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g : /[\u0000-\u001F\u007F]/g, ' ')
+        .trim();
       const optional = (label, name) => (field(name) ? `${label} : ${field(name)}` : null);
 
       const subject = ['Demande de devis', field('type'), field('societe') || field('nom')]

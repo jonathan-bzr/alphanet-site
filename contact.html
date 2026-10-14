@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <!-- Sécurité : la page ne peut charger que les fichiers du site lui-même (aucun service tiers, aucun script extérieur) -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'; form-action 'none'; base-uri 'none'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'; form-action 'none'; base-uri 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
 
   <title>Contact et devis gratuit | Alphanet Société Service</title>
-  <meta name="description" content="Demandez un devis gratuit pour le nettoyage de vos bureaux, copropriété ou commerce à Montpellier et dans l’Hérault. Appelez le 07 58 34 04 07 ou écrivez-nous.">
+  <meta name="description" content="Demandez un devis gratuit pour le nettoyage de vos bureaux, copropriété ou commerce, principalement dans le secteur de l’Hérault. Appelez le 07 58 34 04 07 ou écrivez-nous.">
   <link rel="canonical" href="https://jonathan-bzr.github.io/alphanet-site/contact.html">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#e8f3fd" data-theme-color>
@@ -17,7 +17,7 @@
   <meta property="og:locale" content="fr_FR">
   <meta property="og:site_name" content="Alphanet Société Service">
   <meta property="og:title" content="Contact et devis gratuit | Alphanet Société Service">
-  <meta property="og:description" content="Demandez un devis gratuit pour le nettoyage de vos bureaux, copropriété ou commerce à Montpellier et dans l’Hérault. Appelez le 07 58 34 04 07 ou écrivez-nous.">
+  <meta property="og:description" content="Demandez un devis gratuit pour le nettoyage de vos bureaux, copropriété ou commerce, principalement dans le secteur de l’Hérault. Appelez le 07 58 34 04 07 ou écrivez-nous.">
   <meta property="og:url" content="https://jonathan-bzr.github.io/alphanet-site/contact.html">
   <meta property="og:image" content="https://jonathan-bzr.github.io/alphanet-site/assets/img/og-image.jpg">
   <meta property="og:image:width" content="1200">
@@ -30,9 +30,9 @@
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
   <link rel="preload" href="assets/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
   <!-- Le numéro ?v= force le rechargement après chaque mise à jour : à augmenter quand le CSS ou le JS change -->
-  <link rel="stylesheet" href="assets/css/styles.css?v=20261014-1">
-  <script src="assets/js/theme.js?v=20261014-1"></script>
-  <script src="assets/js/main.js?v=20261014-1" defer></script>
+  <link rel="stylesheet" href="assets/css/styles.css?v=20261014-2">
+  <script src="assets/js/theme.js?v=20261014-2"></script>
+  <script src="assets/js/main.js?v=20261014-2" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#contenu">Aller au contenu</a>
@@ -93,14 +93,6 @@
         </ul>
       </nav>
       <div class="header-actions">
-        <a class="header-phone" href="tel:+33758340407" aria-label="Appeler le 07 58 34 04 07">
-          <svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg>
-          <span>07&nbsp;58&nbsp;34&nbsp;04&nbsp;07</span>
-        </a>
-        <button class="icon-btn theme-toggle" type="button" aria-label="Mode sombre" title="Mode clair / sombre" data-theme-toggle>
-          <svg class="ico ico-moon" aria-hidden="true"><use href="#i-moon"/></svg>
-          <svg class="ico ico-sun" aria-hidden="true"><use href="#i-sun"/></svg>
-        </button>
         <a class="btn btn-primary btn-sm header-cta" href="contact.html#formulaire">Devis gratuit</a>
         <button class="icon-btn nav-toggle" type="button" aria-expanded="false" aria-controls="menu" aria-label="Ouvrir le menu" data-nav-toggle>
           <svg class="ico ico-menu" aria-hidden="true"><use href="#i-menu"/></svg>
@@ -121,6 +113,10 @@
         <div class="menu-actions">
           <a class="btn btn-primary btn-lg" href="contact.html#formulaire">Demander un devis gratuit</a>
           <a class="btn btn-ghost btn-lg" href="tel:+33758340407"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg>07&nbsp;58&nbsp;34&nbsp;04&nbsp;07</a>
+          <button class="theme-switch" type="button" data-theme-toggle>
+            <svg class="ico ico-moon" aria-hidden="true"><use href="#i-moon"/></svg><svg class="ico ico-sun" aria-hidden="true"><use href="#i-sun"/></svg>
+            <span class="ts-to-dark">Mode sombre</span><span class="ts-to-light">Mode clair</span>
+          </button>
         </div>
       </nav>
     </div>
@@ -160,19 +156,7 @@
           <div class="contact-block">
             <div class="zone">
             <p class="zone-title"><svg class="ico" aria-hidden="true"><use href="#i-pin"/></svg> Zone d’intervention</p>
-            <ul class="zone-list">
-              <li>Montpellier</li>
-              <li>Castelnau-le-Lez</li>
-              <li>Lattes</li>
-              <li>Pérols</li>
-              <li>Mauguio</li>
-              <li>Saint-Jean-de-Védas</li>
-              <li>Juvignac</li>
-              <li>Sète</li>
-              <li>Béziers</li>
-              <li>Lunel</li>
-              <li class="zone-all">Tout l’Hérault</li>
-            </ul>
+            <p class="zone-text">Alphanet intervient principalement dans le secteur de l’Hérault. Pour toute question sur votre localisation, appelez-nous&nbsp;: nous étudions chaque demande.</p>
           </div>
           </div>
         </div>
@@ -246,7 +230,7 @@
             <span class="brand-sub">Société Service</span>
           </span>
         </a>
-        <p>Nettoyage professionnel de bureaux, copropriétés et commerces à Montpellier et dans l’Hérault, depuis 2014.</p>
+        <p>Nettoyage professionnel de bureaux, copropriétés et commerces, depuis 2014. Intervient principalement dans le secteur de l’Hérault.</p>
       </div>
 
       <nav class="footer-nav" aria-label="Plan du site">
@@ -263,7 +247,7 @@
       <div class="footer-contact">
         <p class="footer-title">Contact</p>
         <a href="tel:+33758340407"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg>07&nbsp;58&nbsp;34&nbsp;04&nbsp;07</a>
-        <p><svg class="ico" aria-hidden="true"><use href="#i-pin"/></svg>Montpellier et tout l’Hérault</p>
+        <p><svg class="ico" aria-hidden="true"><use href="#i-pin"/></svg>Principalement dans le secteur de l’Hérault</p>
         <a href="contact.html#formulaire"><svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg>Demander un devis gratuit</a>
       </div>
     </div>
@@ -271,6 +255,10 @@
     <div class="container footer-bottom">
       <p>© <span data-current-year>2026</span> Alphanet Société Service</p>
       <p><a href="mentions-legales.html">Mentions légales</a><span aria-hidden="true"> · </span><a href="mentions-legales.html#donnees">Données personnelles</a></p>
+      <button class="theme-switch" type="button" data-theme-toggle>
+            <svg class="ico ico-moon" aria-hidden="true"><use href="#i-moon"/></svg><svg class="ico ico-sun" aria-hidden="true"><use href="#i-sun"/></svg>
+            <span class="ts-to-dark">Mode sombre</span><span class="ts-to-light">Mode clair</span>
+          </button>
     </div>
   </footer>
 </body>

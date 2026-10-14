@@ -40,7 +40,7 @@ Cinq pages, un menu en haut de chaque page (sur téléphone : bouton « menu » 
 | **Engagements** (`engagements.html`) | Service suivi, équipes stables, environnement, confidentialité |
 | **Contact** (`contact.html`) | Téléphone, étapes après la demande, formulaire de devis (la prestation se pré-remplit depuis la page Services) |
 
-Et aussi : **mode clair / sombre** (bouton lune / soleil en haut ; le site s'ouvre en clair) et la page
+Et aussi : **mode clair / sombre** (bouton lune / soleil en bas de page et dans le menu mobile ; le site s'ouvre en clair) et la page
 **mentions légales et données personnelles**.
 
 ## Sécurité et données personnelles
@@ -53,9 +53,22 @@ Et aussi : **mode clair / sombre** (bouton lune / soleil en haut ; le site s'ouv
 - **Formulaire sans stockage** : il prépare un e-mail dans la messagerie du visiteur, rien n'est
   enregistré sur le site. L'adresse de réception est écrite en deux morceaux dans le code pour
   échapper aux robots qui collectent les adresses.
+- **Règle renforcée** : la même règle impose aussi un contrôle strict de tout code injecté
+  (`require-trusted-types-for`). Aucun script ni style n'est écrit « en ligne » dans les pages.
+- **Protection contre l'affichage dans un cadre** : si un autre site essaie d'afficher le vôtre
+  dans un cadre (technique du « clickjacking »), la page se masque et sort du cadre
+  (voir `assets/js/theme.js`).
+- **Formulaire assaini** : les caractères de contrôle (retours à la ligne cachés, etc.) sont retirés
+  des champs avant de préparer l'e-mail, et le pré-remplissage par lien n'accepte qu'une liste fixe de valeurs.
 - Connexion chiffrée (HTTPS) assurée par GitHub Pages.
+- **Ce que GitHub Pages ne permet pas** : envoyer des en-têtes de sécurité (`X-Frame-Options`,
+  `frame-ancestors`, `Permissions-Policy`). C'est compensé par ce qui précède. Si un jour ces en-têtes
+  deviennent importants, il faudra passer par un hébergeur qui les permet (Cloudflare Pages, Netlify).
+- Voir aussi `SECURITY.md` (comment signaler un problème).
 - Le point le plus important de votre côté : activer la **double authentification** sur le
-  compte GitHub qui publie le site.
+  compte GitHub qui publie le site. Dans les réglages du dépôt, vérifier aussi que **Enforce HTTPS**
+  est coché (Settings > Pages) et protéger la branche `main` contre les suppressions et les
+  réécritures forcées (Settings > Branches).
 
 ## Structure du dépôt
 
