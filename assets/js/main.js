@@ -12,8 +12,8 @@
     phone: '07 58 34 04 07',
     // Adresse qui reçoit les demandes de devis, en deux morceaux
     // (avant et après le @) pour que les robots qui collectent les adresses ne la trouvent pas.
-    emailUser: 'jbezara739',
-    emailDomain: 'gmail.com',
+    emailUser: 'contact',
+    emailDomain: 'alphanet-group.fr',
   };
   const THEME_COLORS = { light: '#e8f3fd', dark: '#0c1a30' };
   const THEME_KEY = 'alphanet-theme';

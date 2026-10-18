@@ -115,10 +115,9 @@ en une à deux minutes. Les en-têtes de sécurité sont dans `_headers`.
 
 ## À compléter
 
-- [x] Adresse e-mail de contact : jbezara739@gmail.com (formulaire et mentions légales), à remplacer par une adresse professionnelle si besoin
+- [x] Adresse e-mail de contact : contact@alphanet-group.fr (formulaire et mentions légales, boîte Zimbra chez OVHcloud)
 - [x] Nom de domaine : alphanet-group.fr
 - [ ] Déclarer le site dans Google Search Console
-- [ ] Passer le formulaire et les mentions légales sur contact@alphanet-group.fr une fois la boîte créée
 - [ ] Relire les textes des pages (histoire, valeurs, détail des services, engagements) et corriger ce qui ne correspond pas à la réalité
 - [ ] Certifications éventuelles (ISO 9001, Qualipropre, FEP...), à afficher avec leur logo officiel
 - [ ] Chiffres supplémentaires exacts (sites entretenus, agents, clients) et photos réelles des interventions
