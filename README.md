@@ -50,9 +50,11 @@ Et aussi : **mode clair / sombre** (bouton rond lune / soleil en bas à droite d
 - **Règle de sécurité dans chaque page** (`Content-Security-Policy`) : le navigateur refuse tout
   script, style ou fichier qui ne vient pas du site lui-même, et bloque l'envoi du formulaire vers
   un autre site.
-- **Formulaire sans stockage** : il prépare un e-mail dans la messagerie du visiteur, rien n'est
-  enregistré sur le site. L'adresse de réception est écrite en deux morceaux dans le code pour
-  échapper aux robots qui collectent les adresses.
+- **Formulaire sans stockage** : la demande est envoyée par une petite fonction Cloudflare
+  (`functions/api/devis.js`) directement à la boîte contact@, en e-mail mis en forme. Rien n'est
+  enregistré sur le site. Protections : champs vérifiés côté serveur, champ piège et délai minimum
+  contre les robots, envoi accepté uniquement depuis le site. Si l'envoi échoue, le visiteur peut
+  passer par sa propre messagerie.
 - **Règle renforcée** : la même règle impose aussi un contrôle strict de tout code injecté
   (`require-trusted-types-for`). Aucun script ni style n'est écrit « en ligne » dans les pages.
 - **Protection contre l'affichage dans un cadre** : si un autre site essaie d'afficher le vôtre
@@ -97,8 +99,11 @@ Le menu et le pied de page sont écrits dans chaque page : pour les changer, mod
   que des chiffres exacts.
 - **Zone d'intervention** : textes des pages Entreprise et Contact (« principalement dans l'Hérault (34), mais aussi partout en Occitanie et dans les autres régions du Sud »).
 - **Adresse e-mail du formulaire** : dans `assets/js/main.js`, `emailUser` (avant le @) et
-  `emailDomain` (après le @), à reporter aussi dans `mentions-legales.html`. Aucune clé ni mot de passe
-  n'est nécessaire : le formulaire ouvre la messagerie du visiteur avec la demande pré-remplie.
+  `emailDomain` (après le @), à reporter aussi dans `mentions-legales.html` et `functions/api/devis.js`.
+  Le mot de passe de la boîte contact@ n'est **jamais** dans le code : il est rangé dans Cloudflare
+  (Workers & Pages > alphanet-site > Paramètres > Variables et secrets, secret `SMTP_PASS`). Si le mot de
+  passe de la boîte change, il faut le changer aussi à cet endroit, sinon le formulaire repasse en
+  mode « messagerie du visiteur ».
 - **Couleurs** : en haut de `assets/css/styles.css` (section « 2. Couleurs ») : `--primary` pour le
   bleu, `--accent` pour la touche turquoise ; la deuxième liste concerne le mode sombre.
 - **Formes** : `.chip-drop` (pastille en forme de goutte) et `.bulle` (cadre au coin pointu, avec une étincelle)

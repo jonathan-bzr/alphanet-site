@@ -245,7 +245,8 @@
   if (form) {
     const status = $('[data-form-status]', form);
 
-    const showStatus = (message, icon) => {
+    // Affiche un message sous le formulaire, avec si besoin un bouton (ex. « Envoyer avec ma messagerie »).
+    const showStatus = (message, icon, action) => {
       if (!status) return;
       const svg = document.createElementNS(SVG_NS, 'svg');
       svg.setAttribute('class', 'ico');
@@ -255,7 +256,12 @@
       svg.append(use);
       const text = document.createElement('span');
       text.textContent = message;
-      status.replaceChildren(svg, text);
+      const body = document.createElement('div');
+      body.className = 'form-status-body';
+      body.append(text);
+      if (action) body.append(action);
+      status.replaceChildren(svg, body);
+      status.classList.toggle('is-error', icon !== 'check');
       status.hidden = false;
     };
 
@@ -265,8 +271,71 @@
     form.addEventListener('input', recheck);
     form.addEventListener('change', recheck);
 
-    form.addEventListener('submit', (event) => {
+    const button = $('button[type="submit"]', form);
+    const buttonContent = button ? Array.from(button.childNodes, (node) => node.cloneNode(true)) : [];
+    const startedAt = Date.now();
+
+    // Retire les caractères de contrôle (dont les retours à la ligne, sauf dans le message) : rien ne peut être glissé dans l'objet de l'e-mail.
+    const readForm = () => {
+      const data = new FormData(form);
+      const field = (name) => String(data.get(name) || '')
+        .replace(name === 'message' ? /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g : /[\u0000-\u001F\u007F]/g, ' ')
+        .trim();
+      return {
+        nom: field('nom'),
+        societe: field('societe'),
+        telephone: field('telephone'),
+        email: field('email'),
+        type: field('type'),
+        message: field('message'),
+        site_web: field('site_web'),
+      };
+    };
+
+    // Solution de secours : un e-mail pré-rempli dans la messagerie du visiteur.
+    const mailtoLink = (d) => {
+      const subject = ['Demande de devis', d.type, d.societe || d.nom].filter(Boolean).join(' — ');
+      const body = [
+        'Bonjour,',
+        '',
+        'Je souhaite obtenir un devis.',
+        '',
+        `Nom : ${d.nom}`,
+        d.societe ? `Société / organisme : ${d.societe}` : null,
+        `Téléphone : ${d.telephone}`,
+        `E-mail : ${d.email}`,
+        `Prestation : ${d.type}`,
+        '',
+        d.message,
+        '',
+        'Cordialement,',
+        d.nom,
+      ].filter((line) => line !== null).join('\r\n');
+      return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    };
+
+    const fallback = (d, message) => {
+      if (!email) {
+        showStatus(`${message} Merci de nous appeler au ${CONFIG.phone}.`, 'phone');
+        return;
+      }
+      const link = document.createElement('a');
+      link.className = 'btn btn-ghost';
+      link.href = mailtoLink(d);
+      link.textContent = 'Envoyer avec ma messagerie';
+      showStatus(`${message} Vous pouvez envoyer la demande depuis votre messagerie, ou nous appeler au ${CONFIG.phone}.`, 'phone', link);
+    };
+
+    const setSending = (sending) => {
+      if (!button) return;
+      button.disabled = sending;
+      if (sending) button.textContent = 'Envoi en cours…';
+      else button.replaceChildren(...buttonContent.map((node) => node.cloneNode(true)));
+    };
+
+    form.addEventListener('submit', async (event) => {
       event.preventDefault();
+      if (button && button.disabled) return;
       const controls = $$('input, select, textarea', form).filter((control) => control.willValidate);
       const invalid = controls.filter((control) => !checkField(control));
       if (invalid.length) {
@@ -274,40 +343,39 @@
         return;
       }
 
-      if (!email) {
-        showStatus(`L’envoi en ligne n’est pas encore activé. Merci de nous appeler au ${CONFIG.phone}.`, 'phone');
+      const d = readForm();
+      if (!('fetch' in window)) {
+        fallback(d, 'L’envoi direct n’est pas possible avec ce navigateur.');
         return;
       }
 
-      const data = new FormData(form);
-      // Retire les caractères de contrôle (dont les retours à la ligne, sauf dans le message) : rien ne peut être glissé dans l'objet de l'e-mail.
-      const field = (name) => String(data.get(name) || '')
-        .replace(name === 'message' ? /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g : /[\u0000-\u001F\u007F]/g, ' ')
-        .trim();
-      const optional = (label, name) => (field(name) ? `${label} : ${field(name)}` : null);
-
-      const subject = ['Demande de devis', field('type'), field('societe') || field('nom')]
-        .filter(Boolean)
-        .join(' — ');
-      const body = [
-        'Bonjour,',
-        '',
-        'Je souhaite obtenir un devis.',
-        '',
-        `Nom : ${field('nom')}`,
-        optional('Société / organisme', 'societe'),
-        `Téléphone : ${field('telephone')}`,
-        `E-mail : ${field('email')}`,
-        `Prestation : ${field('type')}`,
-        '',
-        field('message'),
-        '',
-        'Cordialement,',
-        field('nom'),
-      ].filter((line) => line !== null).join('\r\n');
-
-      window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      showStatus(`Votre messagerie s’ouvre avec votre demande pré-remplie : il ne reste plus qu’à l’envoyer. Si rien ne s’ouvre, appelez-nous au ${CONFIG.phone}.`, 'check');
+      setSending(true);
+      status.hidden = true;
+      const controller = 'AbortController' in window ? new AbortController() : null;
+      const timer = controller ? window.setTimeout(() => controller.abort(), 20000) : 0;
+      try {
+        const response = await fetch('/api/devis', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...d, t: Date.now() - startedAt }),
+          credentials: 'omit',
+          cache: 'no-store',
+          signal: controller ? controller.signal : undefined,
+        });
+        if (response.ok) {
+          form.reset();
+          showStatus('Merci, votre demande a bien été envoyée. Nous vous recontactons très vite.', 'check');
+        } else if (response.status === 422) {
+          fallback(d, 'Certaines informations n’ont pas été acceptées (vérifiez le téléphone et l’e-mail).');
+        } else {
+          fallback(d, 'L’envoi n’a pas abouti.');
+        }
+      } catch (error) {
+        fallback(d, 'L’envoi n’a pas abouti (connexion interrompue).');
+      } finally {
+        window.clearTimeout(timer);
+        setSending(false);
+      }
     });
   }
 })();

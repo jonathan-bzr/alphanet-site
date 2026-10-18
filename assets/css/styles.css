@@ -819,6 +819,13 @@ html.menu-lock { overflow: hidden; }
   background: var(--primary-soft); color: var(--text); font-weight: 600; font-size: .96rem;
 }
 .form-status .ico { width: 20px; height: 20px; margin-top: .1rem; color: var(--primary); }
+.form-status.is-error { background: var(--surface-2, var(--primary-soft)); box-shadow: inset 3px 0 0 #d64545; }
+.form-status.is-error .ico { color: #d64545; }
+.form-status-body { display: grid; gap: .6rem; }
+.form-status-body .btn { justify-self: start; }
+.form-submit .btn[disabled] { opacity: .7; cursor: progress; transform: none; }
+/* Champ piège invisible : seuls les robots le remplissent */
+.form-hp { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
 .form-noscript { margin-top: 1rem; font-weight: 600; }
 
 

@@ -13,7 +13,9 @@ Si vous pensez avoir trouvé une faille, merci de **ne pas la publier** : écriv
 
 - Aucun cookie, aucun traceur, aucune police ou image chargée depuis un autre site.
 - Politique de sécurité du contenu (CSP) dans chaque page, sans script ni style « en ligne ».
-- Formulaire sans enregistrement : il prépare un e-mail dans la messagerie du visiteur.
+- Formulaire sans enregistrement : la demande est envoyée par une fonction Cloudflare à la boîte
+  contact@ (champs vérifiés côté serveur, champ piège anti-robots, origine contrôlée). Le mot de passe
+  de la boîte est un secret Cloudflare, jamais dans le dépôt.
 - Sortie automatique du cadre si la page est affichée dans un autre site.
 - Aucun secret (mot de passe, clé) dans le dépôt : à ne jamais en ajouter.
 
