@@ -10,11 +10,10 @@
   /* Configuration --------------------------------------------------------- */
   const CONFIG = {
     phone: '07 58 34 04 07',
-    // ⚠️ À COMPLÉTER : adresse qui recevra les demandes de devis, en deux morceaux
+    // Adresse qui reçoit les demandes de devis, en deux morceaux
     // (avant et après le @) pour que les robots qui collectent les adresses ne la trouvent pas.
-    // Exemple : emailUser: 'contact', emailDomain: 'alphanet.fr'
-    emailUser: '',
-    emailDomain: '',
+    emailUser: 'jbezara739',
+    emailDomain: 'gmail.com',
   };
   const THEME_COLORS = { light: '#e8f3fd', dark: '#0c1a30' };
   const THEME_KEY = 'alphanet-theme';
@@ -39,10 +38,15 @@
   const applyTheme = (theme) => {
     root.setAttribute('data-theme', theme);
     if (themeMeta) themeMeta.setAttribute('content', THEME_COLORS[theme]);
+    const label = theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre';
+    themeToggles.forEach((toggle) => {
+      toggle.setAttribute('aria-label', label);
+      toggle.setAttribute('title', label);
+    });
   };
   applyTheme(root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
 
-  // Le bouton est dans le pied de page et dans le menu mobile : tous font la même chose.
+  // Bouton flottant en bas à droite de chaque page.
   themeToggles.forEach((toggle) => {
     toggle.addEventListener('click', () => {
       const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
@@ -226,11 +230,12 @@
   // Les pages de services renvoient ici avec ?prestation=... : la prestation est alors pré-remplie.
   const PRESTATIONS = {
     'bureaux': 'Bureaux / locaux professionnels',
+    'hotellerie': 'Hôtellerie',
     'coproprietes': 'Copropriété / parties communes',
     'commerces': 'Commerce / lieu recevant du public',
     'vitrerie': 'Vitrerie',
-    'remise-en-etat': 'Remise en état / fin de chantier',
-    'apres-sinistre': 'Intervention après sinistre',
+    'remise-en-etat': 'Remise en état / après sinistre',
+    'apres-sinistre': 'Remise en état / après sinistre',
   };
   if (typeSelect) {
     const wanted = new URLSearchParams(window.location.search).get('prestation');

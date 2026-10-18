@@ -267,6 +267,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
   background: rgb(5 10 20 / .4);
 }
 
+.site-header:not(.is-scrolled)::before {
+  content: ""; position: absolute; inset: 0 0 -28px; z-index: -1; pointer-events: none;
+  background: linear-gradient(rgb(244 249 255 / .78) 0%, rgb(244 249 255 / .6) 55%, rgb(244 249 255 / 0) 100%);
+}
 :root[data-theme="dark"] .site-header:not(.is-scrolled)::before {
   content: ""; position: absolute; inset: 0 0 -28px; z-index: -1; pointer-events: none;
   background: linear-gradient(rgb(8 20 42 / .85) 0%, rgb(8 20 42 / .78) 55%, rgb(8 20 42 / 0) 100%);
@@ -274,9 +278,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 .brand { display: inline-flex; align-items: center; gap: .75rem; color: var(--text); text-decoration: none; }
 .brand-mark { width: 40px; height: 40px; }
-.brand-text { display: flex; flex-direction: column; line-height: 1; }
+.brand-text { display: inline-flex; flex-direction: column; line-height: 1; }
 .brand-name { font-size: 1.12rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
-.brand-sub { margin-top: .38rem; color: var(--primary); font-size: .6rem; font-weight: 650; letter-spacing: .31em; text-transform: uppercase; }
+/* « GROUP » réparti sur toute la largeur de « ALPHANET », comme sur le logo */
+.brand-sub { display: flex; justify-content: space-between; margin-top: .38rem; padding-right: .13em; color: var(--primary); font-size: .66rem; font-weight: 650; text-transform: uppercase; }
 
 .nav { margin-left: auto; }
 .nav-list { display: flex; gap: .15rem; }
@@ -289,20 +294,25 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .nav-list a[aria-current] { color: var(--primary); background: var(--primary-soft); }
 
 .header-actions { display: flex; align-items: center; gap: .55rem; }
-/* Bouton clair / sombre : dans le pied de page et dans le menu mobile (pas dans l'en-tête) */
-.theme-switch {
-  display: none; align-items: center; justify-content: center; gap: .5rem;
-  min-height: 44px; padding: .45rem .95rem; border: 1px solid var(--border-strong); border-radius: 999px;
-  background: transparent; color: var(--text-2); font: inherit; font-size: .92rem; font-weight: 640; cursor: pointer;
-  transition: color .2s, background-color .2s, border-color .2s;
+/* Bouton clair / sombre flottant, en bas à droite de l'écran (suit le défilement) */
+.theme-fab {
+  position: fixed; z-index: 45; right: max(1rem, env(safe-area-inset-right)); bottom: calc(1rem + env(safe-area-inset-bottom));
+  display: none; place-items: center; width: 48px; height: 48px; padding: 0;
+  border: 1px solid var(--border-strong); border-radius: 50%;
+  background: var(--surface); color: var(--primary); box-shadow: var(--shadow-md); cursor: pointer;
+  transition: transform .3s var(--ease), bottom .4s var(--ease), box-shadow .25s, background-color .25s;
 }
-.theme-switch:hover { color: var(--text); background: var(--surface-2); }
-.theme-switch .ico { width: 18px; height: 18px; color: var(--primary); }
-.js .theme-switch { display: inline-flex; }
-.theme-switch .ico-sun, .theme-switch .ts-to-light { display: none; }
-:root[data-theme="dark"] .theme-switch .ico-sun, :root[data-theme="dark"] .theme-switch .ts-to-light { display: inline; }
-:root[data-theme="dark"] .theme-switch .ico-moon, :root[data-theme="dark"] .theme-switch .ts-to-dark { display: none; }
-.menu-actions .theme-switch { justify-self: center; margin-top: .35rem; }
+.js .theme-fab { display: grid; }
+.theme-fab:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.theme-fab:focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; }
+.theme-fab .ico { width: 22px; height: 22px; }
+.theme-fab .ico-sun { display: none; }
+:root[data-theme="dark"] .theme-fab .ico-sun { display: block; }
+:root[data-theme="dark"] .theme-fab .ico-moon { display: none; }
+/* Sur téléphone, il remonte au-dessus de la barre « Appeler / Devis » quand elle apparaît */
+.mobile-bar.is-visible ~ .theme-fab { bottom: calc(1rem + 62px + .6rem + env(safe-area-inset-bottom)); }
+/* Menu mobile ouvert : on le cache pour ne pas gêner */
+.menu-lock .theme-fab { opacity: 0; pointer-events: none; }
 
 .nav-toggle { display: none; }
 .nav-toggle .ico-close { display: none; }
@@ -338,7 +348,7 @@ html.menu-lock { overflow: hidden; }
   .header-cta { display: none; }
   .brand-mark { width: 34px; height: 34px; }
   .brand-name { font-size: 1rem; }
-  .brand-sub { font-size: .55rem; }
+  .brand-sub { font-size: .6rem; }
 }
 
 
@@ -434,9 +444,53 @@ html.menu-lock { overflow: hidden; }
   .stats { gap: 1.25rem 1rem; }
 }
 
-/* Léger effet de profondeur au défilement (navigateurs compatibles uniquement) */
+/* Quelques bulles en relief qui flottent très lentement (ordinateur uniquement) */
+.hero-bubbles { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; display: none; }
+@media (min-width: 900px) { .hero-bubbles { display: block; } }
+.hero-bubbles span {
+  position: absolute; left: var(--x); top: var(--y); width: var(--s); aspect-ratio: 1; border-radius: 50%;
+  background:
+    radial-gradient(circle at 31% 27%, rgb(255 255 255 / .95) 0 3.5%, rgb(255 255 255 / 0) 9%),
+    radial-gradient(circle at 70% 76%, rgb(255 255 255 / .35) 0 4%, rgb(255 255 255 / 0) 12%),
+    radial-gradient(circle at 50% 50%, rgb(255 255 255 / 0) 55%, rgb(255 255 255 / .16) 78%, rgb(255 255 255 / .5) 96%, rgb(255 255 255 / 0) 100%);
+  box-shadow: inset -.35em -.5em 1.2em rgb(30 100 190 / .12), inset .25em .3em .8em rgb(255 255 255 / .3);
+  opacity: var(--o, .85);
+  will-change: transform;
+  animation: bubble-drift var(--d, 14s) ease-in-out var(--w, 0s) infinite alternate;
+}
+/* Film irisé sur le bord, très discret */
+.hero-bubbles span::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; opacity: .55;
+  background: conic-gradient(from 210deg, #7fe3ff, #b9a6ff, #ffc6e6, #ffe3a3, #8ff2d2, #7fe3ff);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 1.5px), transparent);
+  mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 1.5px), transparent);
+}
+:root[data-theme="dark"] .hero-bubbles span { opacity: calc(var(--o, .85) * .55); box-shadow: inset -.35em -.5em 1.2em rgb(0 0 0 / .25), inset .25em .3em .8em rgb(190 220 255 / .18); }
+.hero-bubbles span:nth-child(1) { --x: 56%; --y: 18%; --s: 74px; --d: 16s; }
+.hero-bubbles span:nth-child(2) { --x: 64%; --y: 66%; --s: 46px; --d: 12s; --w: -4s; --o: .7; }
+.hero-bubbles span:nth-child(3) { --x: 90%; --y: 12%; --s: 58px; --d: 18s; --w: -9s; }
+.hero-bubbles span:nth-child(4) { --x: 94%; --y: 72%; --s: 96px; --d: 20s; --w: -6s; --o: .75; }
+.hero-bubbles span:nth-child(5) { --x: 50%; --y: 84%; --s: 30px; --d: 11s; --w: -2s; --o: .6; }
+@keyframes bubble-drift {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  50%  { transform: translate3d(6px, -16px, 0) scale(1.02, .985); }
+  100% { transform: translate3d(-4px, -28px, 0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) { .hero-bubbles span { animation: none; } }
+
+/* Téléphone et tablette : effets coûteux allégés pour un défilement fluide
+   (flou d'arrière-plan remplacé par un fond plein, pas d'effet de profondeur au défilement) */
+@media (max-width: 899px) {
+  .site-header.is-scrolled, .site-header.menu-open, .mobile-bar, .bulle.hero-card, .hero-eyebrow, .quicknav a {
+    -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
+  }
+  .site-header.is-scrolled, .site-header.menu-open, .mobile-bar { background: var(--bg); }
+  .bulle.hero-card { background: var(--surface); }
+}
+
+/* Léger effet de profondeur au défilement (ordinateur, navigateurs compatibles uniquement) */
 @supports (animation-timeline: scroll()) {
-  @media (prefers-reduced-motion: no-preference) {
+  @media (prefers-reduced-motion: no-preference) and (min-width: 900px) {
     .hero-media { animation: hero-depth linear both; animation-timeline: scroll(root); animation-range: 0 100vh; }
     @keyframes hero-depth { to { transform: translateY(14%) scale(1.06); } }
   }
@@ -464,6 +518,20 @@ html.menu-lock { overflow: hidden; }
 }
 .service-more .ico { width: 18px; height: 18px; transition: transform .25s var(--ease); }
 .service:hover .service-more .ico { transform: translateX(4px); }
+
+/* Bureaux et Hôtellerie mis en avant : deux grandes cartes en tête de liste */
+.service--featured {
+  border-color: transparent;
+  background: linear-gradient(150deg, var(--bulle-tint), var(--surface) 70%);
+  box-shadow: inset 0 0 0 1px var(--border-strong);
+}
+.service--featured h3 { font-size: clamp(1.25rem, 1.1rem + .5vw, 1.45rem); }
+@media (min-width: 1000px) {
+  .services { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .service { grid-column: span 3; }
+  .service--featured { grid-column: span 6; padding: 2.1rem 2.2rem 2rem; }
+  .service--featured p { max-width: 34rem; font-size: 1.05rem; }
+}
 
 /* Sur téléphone : cartes compactes (pictogramme à gauche) pour moins défiler */
 @media (max-width: 639px) {
@@ -801,6 +869,6 @@ html.menu-lock { overflow: hidden; }
 }
 
 @media print {
-  .site-header, .mobile-bar, .hero-media, .wave, .cta-band { display: none !important; }
+  .site-header, .mobile-bar, .hero-media, .hero-bubbles, .theme-fab, .wave, .cta-band { display: none !important; }
   .hero { min-height: 0; padding-top: 2rem; }
 }

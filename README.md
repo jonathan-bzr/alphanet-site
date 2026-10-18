@@ -1,8 +1,8 @@
-# Alphanet Société Service — site vitrine
+# Alphanet Group — site vitrine
 
-Site vitrine d'**Alphanet Société Service**, entreprise de nettoyage professionnel à Montpellier
+Site vitrine d'**Alphanet Group**, entreprise de nettoyage professionnel à Montpellier
 depuis 2014 : entretien de bureaux, copropriétés et commerces, vitrerie, remise en état
-et interventions après sinistre, à Montpellier et dans tout l'Hérault.
+et après sinistre, dans l'Hérault (34) et ses alentours, en Occitanie.
 
 [![Site en ligne](https://img.shields.io/badge/site-en%20ligne-1f5ad6?style=for-the-badge)](https://jonathan-bzr.github.io/alphanet-site/)
 [![Hébergé sur GitHub Pages](https://img.shields.io/badge/h%C3%A9berg%C3%A9%20sur-GitHub%20Pages-0c1a2e?style=for-the-badge&logo=github)](https://github.com/jonathan-bzr/alphanet-site/deployments)
@@ -21,12 +21,12 @@ et interventions après sinistre, à Montpellier et dans tout l'Hérault.
 
 | | |
 |---|---|
-| Nom commercial | Alphanet Société Service |
+| Nom commercial | Alphanet Group |
 | Raison sociale | ALPHANET PROPRETE ET SERVICES (APS), SAS |
 | Activité | Nettoyage courant des bâtiments (APE 81.21Z) |
 | Siège | Montpellier (34070) |
 | Téléphone | [07 58 34 04 07](tel:+33758340407) |
-| Secteur | Montpellier, sa métropole et tout l'Hérault (34) |
+| Secteur | L'Hérault (34) et ses alentours, en Occitanie |
 
 ## Le site en bref
 
@@ -36,11 +36,11 @@ Cinq pages, un menu en haut de chaque page (sur téléphone : bouton « menu » 
 |---|---|
 | **Accueil** (`index.html`) | Titre, devis et téléphone en un clic, chiffres clés, mission et valeurs, aperçu des six services et des engagements |
 | **Entreprise** (`entreprise.html`) | Histoire, mission, valeurs, méthode de travail, zone d'intervention |
-| **Services** (`services.html`) | Les six prestations en détail : bureaux, copropriétés, commerces, vitrerie, remise en état, après sinistre |
+| **Services** (`services.html`) | Les six prestations en détail : bureaux, hôtellerie (mis en avant), copropriétés, commerces, vitrerie, remise en état et après sinistre |
 | **Engagements** (`engagements.html`) | Service suivi, équipes stables, environnement, confidentialité |
 | **Contact** (`contact.html`) | Téléphone, étapes après la demande, formulaire de devis (la prestation se pré-remplit depuis la page Services) |
 
-Et aussi : **mode clair / sombre** (bouton lune / soleil en bas de page et dans le menu mobile ; le site s'ouvre en clair) et la page
+Et aussi : **mode clair / sombre** (bouton rond lune / soleil en bas à droite de l'écran, toujours visible ; le site s'ouvre en clair) et la page
 **mentions légales et données personnelles**.
 
 ## Sécurité et données personnelles
@@ -64,6 +64,8 @@ Et aussi : **mode clair / sombre** (bouton lune / soleil en bas de page et dans 
 - **Ce que GitHub Pages ne permet pas** : envoyer des en-têtes de sécurité (`X-Frame-Options`,
   `frame-ancestors`, `Permissions-Policy`). C'est compensé par ce qui précède. Si un jour ces en-têtes
   deviennent importants, il faudra passer par un hébergeur qui les permet (Cloudflare Pages, Netlify).
+- **Référencement** : titres et descriptions propres à chaque page, données structurées
+  (entreprise locale, services, fil d'Ariane), `sitemap.xml` et `robots.txt`.
 - Voir aussi `SECURITY.md` (comment signaler un problème).
 - Le point le plus important de votre côté : activer la **double authentification** sur le
   compte GitHub qui publie le site. Dans les réglages du dépôt, vérifier aussi que **Enforce HTTPS**
@@ -95,10 +97,10 @@ Le menu et le pied de page sont écrits dans chaque page : pour les changer, mod
 - **Chiffres de l'accueil** : bloc « Alphanet en bref » (accueil et page Entreprise). Le chiffre des
   années d'expérience se met à jour tout seul chaque année (date de création : 10 avril 2014). Ne mettre
   que des chiffres exacts.
-- **Communes de la zone d'intervention** : pages Entreprise et Contact, une ligne `<li>` par commune.
-- **Adresse e-mail du formulaire** : dans `assets/js/main.js`, remplir `emailUser` (avant le @) et
-  `emailDomain` (après le @), puis la reporter dans `mentions-legales.html`. Tant qu'elle est vide,
-  le formulaire invite le visiteur à appeler.
+- **Zone d'intervention** : textes des pages Entreprise et Contact (« l'Hérault (34) et ses alentours, en Occitanie »).
+- **Adresse e-mail du formulaire** : dans `assets/js/main.js`, `emailUser` (avant le @) et
+  `emailDomain` (après le @), à reporter aussi dans `mentions-legales.html`. Aucune clé ni mot de passe
+  n'est nécessaire : le formulaire ouvre la messagerie du visiteur avec la demande pré-remplie.
 - **Couleurs** : en haut de `assets/css/styles.css` (section « 2. Couleurs ») : `--primary` pour le
   bleu, `--accent` pour la touche turquoise ; la deuxième liste concerne le mode sombre.
 - **Formes** : `.chip-drop` (pastille en forme de goutte) et `.bulle` (cadre au coin pointu, avec une étincelle)
@@ -114,16 +116,17 @@ en une à deux minutes.
 
 ## À compléter
 
-- [ ] Adresse e-mail de contact (formulaire de devis et mentions légales)
+- [x] Adresse e-mail de contact : jbezara739@gmail.com (formulaire et mentions légales), à remplacer par une adresse professionnelle si besoin
+- [ ] Nom de domaine : une fois choisi, remplacer `https://jonathan-bzr.github.io/alphanet-site/` dans les pages, `sitemap.xml` et `robots.txt`, puis déclarer le site dans Google Search Console
 - [ ] Relire les textes des pages (histoire, valeurs, détail des services, engagements) et corriger ce qui ne correspond pas à la réalité
 - [ ] Certifications éventuelles (ISO 9001, Qualipropre, FEP...), à afficher avec leur logo officiel
 - [ ] Chiffres supplémentaires exacts (sites entretenus, agents, clients) et photos réelles des interventions
-- [ ] Médiateur de la consommation (obligatoire pour les clients particuliers)
+- [ ] Médiateur de la consommation (obligatoire pour les clients particuliers ; le formulaire propose « Particulier (domicile) »)
 - [ ] Vérifier que la raison sociale et le SIREN des mentions légales sont toujours à jour
 
 ## Crédits
 
-- Logo et illustrations : réalisés pour Alphanet Société Service.
+- Logo et illustrations : réalisés pour Alphanet Group.
 - Police de caractères : [Plus Jakarta Sans](https://github.com/tokotype/PlusJakartaSans) (SIL Open Font License).
 
-© Alphanet Société Service — tous droits réservés.
+© Alphanet Group — tous droits réservés.
