@@ -1,0 +1,21 @@
+# En-têtes de sécurité envoyés par Cloudflare Pages (ignorés par GitHub Pages).
+# Ils complètent la règle de sécurité déjà écrite dans chaque page.
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'; form-action 'none'; base-uri 'none'; frame-ancestors 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+
+# Fichiers versionnés (?v=) : mis en cache longtemps par les navigateurs
+/assets/*
+  Cache-Control: public, max-age=2592000
+
+# Documents internes du dépôt : pas besoin de les indexer
+/README.md
+  X-Robots-Tag: noindex
+/SECURITY.md
+  X-Robots-Tag: noindex

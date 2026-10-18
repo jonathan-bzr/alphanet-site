@@ -61,6 +61,8 @@ Et aussi : **mode clair / sombre** (bouton rond lune / soleil en bas à droite d
 - **Formulaire assaini** : les caractères de contrôle (retours à la ligne cachés, etc.) sont retirés
   des champs avant de préparer l'e-mail, et le pré-remplissage par lien n'accepte qu'une liste fixe de valeurs.
 - Connexion chiffrée (HTTPS) assurée par GitHub Pages.
+- **Hébergement Cloudflare Pages (prévu)** : le fichier `_headers` envoie les en-têtes de sécurité
+  (anti-cadre, `Permissions-Policy`, HSTS…) dès que le site est servi par Cloudflare.
 - **Ce que GitHub Pages ne permet pas** : envoyer des en-têtes de sécurité (`X-Frame-Options`,
   `frame-ancestors`, `Permissions-Policy`). C'est compensé par ce qui précède. Si un jour ces en-têtes
   deviennent importants, il faudra passer par un hébergeur qui les permet (Cloudflare Pages, Netlify).
