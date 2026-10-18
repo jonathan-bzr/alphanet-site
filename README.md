@@ -84,7 +84,7 @@ Et aussi : **mode clair / sombre** (bouton rond lune / soleil en bas à droite d
 | `assets/js/main.js` | Mode sombre, menu, chiffres clés, formulaire |
 | `assets/fonts/` | Police Plus Jakarta Sans (licence libre OFL) |
 | `assets/img/fond/` | Fonds d'image (version claire et sombre, ordinateur et téléphone) |
-| `assets/img/logo/` | Logo : couleur, blanc (fonds foncés), pictogramme, PNG |
+| `assets/img/logo/` | Logo « A » au trait de raclette : couleur, blanc (fonds foncés), noir (une couleur), pictogramme, SVG et PNG |
 | `assets/img/og-image.jpg` | Image affichée quand on partage le lien (WhatsApp, LinkedIn…) |
 | `.nojekyll` | Publie les fichiers tels quels (ancienne adresse GitHub Pages) |
 
@@ -131,7 +131,7 @@ en une à deux minutes. Les en-têtes de sécurité sont dans `_headers`.
 
 ## Crédits
 
-- Logo et illustrations : réalisés pour Alphanet Group.
+- Logo et illustrations : réalisés pour Alphanet Group. Le texte du logo est dessiné avec la police Archivo (licence libre SIL Open Font License), transformée en formes : aucune police à charger.
 - Police de caractères : [Plus Jakarta Sans](https://github.com/tokotype/PlusJakartaSans) (SIL Open Font License).
 
 © Alphanet Group — tous droits réservés.

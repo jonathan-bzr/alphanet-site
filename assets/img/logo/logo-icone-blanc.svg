@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="t">
 <title id="t">Alphanet Group</title>
-<defs><linearGradient id="ag" x1="10" y1="6" x2="56" y2="58" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#8bb6ff"/><stop offset="1" stop-color="#3d7bf0"/></linearGradient></defs>
-<path fill="url(#ag)" fill-rule="evenodd" stroke="url(#ag)" stroke-width="4" stroke-linejoin="round" d="M32 7 56.5 56H43L32 47 21 56H7.5ZM32 18.5s-8.3 10.2-8.3 15.6a8.3 8.3 0 0 0 16.6 0c0-5.4-8.3-15.6-8.3-15.6Z"/><path fill="#2dd4bf" d="M53 3.6q1.1 5.4 6.4 6.5-5.3 1.1-6.4 6.5-1.1-5.4-6.5-6.5 5.4-1.1 6.5-6.5Z"/>
+<path fill="#ffffff" d="M26.20 4.00 32.40 4.00 32.40 20.45 26.39 36.30 12.69 38.07ZM37.09 34.92 31.60 20.45 31.60 4.00 37.80 4.00 49.43 33.33ZM21.47 49.28 17.40 60.00 4.00 60.00 7.54 51.08ZM60.00 60.00 46.60 60.00 41.55 46.69 54.08 45.07Z"/>
+<path fill="#7aa7ff" d="M1.00 42.00 63.00 34.00 63.00 41.50 1.00 49.50Z"/>
 </svg>
