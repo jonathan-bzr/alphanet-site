@@ -91,69 +91,55 @@ const parisDate = (date) => new Intl.DateTimeFormat('fr-FR', {
 
 function textVersion(d, when) {
   const lines = [
-    'NOUVELLE DEMANDE DE DEVIS',
-    'Reçue depuis le site alphanet-group.fr',
+    `Demande de devis : ${d.type}`,
+    'Alphanet Group · site alphanet-group.fr',
     '',
-    `Prestation : ${d.type}`,
-    '',
-    'CONTACT',
     `Nom : ${d.nom}`,
-    d.societe ? `Société / organisme : ${d.societe}` : null,
+    d.societe ? `Société : ${d.societe}` : null,
     `Téléphone : ${d.telephone}`,
     `E-mail : ${d.email}`,
+    `Prestation : ${d.type}`,
     '',
-    'BESOIN',
+    'Besoin :',
     d.message || '(aucun détail indiqué)',
     '',
-    '—',
-    `Envoyé le ${when}. Pour répondre au client, utilisez simplement « Répondre ».`,
+    `Reçu le ${when}. Pour répondre au client, utilisez « Répondre ».`,
   ];
   return lines.filter((line) => line !== null).join('\r\n');
 }
 
+// Mise en page sobre : fond blanc, texte noir, libellés gris, liens bleus standards.
 function htmlVersion(d, when) {
   const e = Object.fromEntries(Object.entries(d).map(([k, v]) => [k, escapeHtml(v)]));
   const tel = d.telephone.replace(/[^0-9+]/g, '');
-  const message = d.message ? e.message.replace(/\n/g, '<br>') : '<span style="color:#7a8aa3">Aucun détail indiqué.</span>';
+  const message = d.message ? e.message.replace(/\n/g, '<br>') : '<span style="color:#6b7280">Aucun détail indiqué.</span>';
   const row = (label, value) => `
-          <tr>
-            <td style="padding:10px 0;border-bottom:1px solid #e6edf6;color:#5b6b84;font-size:13px;width:150px;vertical-align:top">${label}</td>
-            <td style="padding:10px 0;border-bottom:1px solid #e6edf6;color:#0c1a30;font-size:15px;font-weight:600">${value}</td>
-          </tr>`;
-  const replySubject = encodeURIComponent('Votre demande de devis — Alphanet Group');
+        <tr>
+          <td style="padding:8px 16px 8px 0;border-bottom:1px solid #e5e7eb;color:#6b7280;font-size:14px;width:140px;vertical-align:top">${label}</td>
+          <td style="padding:8px 0;border-bottom:1px solid #e5e7eb;color:#111827;font-size:15px">${value}</td>
+        </tr>`;
+  const link = (href, text) => `<a href="${href}" style="color:#1d4ed8;text-decoration:underline">${text}</a>`;
   return `<!doctype html>
 <html lang="fr">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Demande de devis</title></head>
-<body style="margin:0;padding:0;background:#eef4fb;font-family:Arial,Helvetica,sans-serif">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eef4fb;padding:24px 12px">
-    <tr><td align="center">
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:14px;overflow:hidden;border:1px solid #dbe5f1">
-        <tr><td style="background:#1f5ad6;padding:22px 28px">
-          <div style="color:#cfe0ff;font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:700">Alphanet Group</div>
-          <div style="color:#ffffff;font-size:22px;font-weight:700;margin-top:6px">Nouvelle demande de devis</div>
-          <div style="color:#dbe7ff;font-size:13px;margin-top:4px">Reçue depuis le site alphanet-group.fr</div>
+<body style="margin:0;padding:0;background:#ffffff;font-family:Arial,Helvetica,sans-serif;color:#111827">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+    <tr><td style="padding:24px 16px">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px">
+        <tr><td style="padding-bottom:16px;border-bottom:2px solid #111827">
+          <div style="font-size:13px;color:#6b7280">Alphanet Group · site alphanet-group.fr</div>
+          <div style="font-size:20px;font-weight:bold;margin-top:4px">Demande de devis : ${e.type}</div>
         </td></tr>
-        <tr><td style="padding:24px 28px 8px">
-          <div style="display:inline-block;background:#e8f0ff;color:#1f5ad6;font-weight:700;font-size:14px;padding:8px 14px;border-radius:999px">${e.type}</div>
-        </td></tr>
-        <tr><td style="padding:8px 28px 0">
-          <div style="color:#1f5ad6;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;margin:12px 0 4px">Contact</div>
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0">${row('Nom', e.nom)}${d.societe ? row('Société / organisme', e.societe) : ''}${row('Téléphone', `<a href="tel:${tel}" style="color:#1f5ad6;text-decoration:none">${e.telephone}</a>`)}${row('E-mail', `<a href="mailto:${e.email}" style="color:#1f5ad6;text-decoration:none">${e.email}</a>`)}
+        <tr><td style="padding-top:8px">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0">${row('Nom', `<strong>${e.nom}</strong>`)}${d.societe ? row('Société', `<strong>${e.societe}</strong>`) : ''}${row('Téléphone', link(`tel:${tel}`, e.telephone))}${row('E-mail', link(`mailto:${e.email}`, e.email))}${row('Prestation', e.type)}
           </table>
         </td></tr>
-        <tr><td style="padding:20px 28px 0">
-          <div style="color:#1f5ad6;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;margin-bottom:8px">Besoin</div>
-          <div style="background:#f5f8fc;border-left:4px solid #1f5ad6;border-radius:8px;padding:14px 16px;color:#0c1a30;font-size:15px;line-height:1.55">${message}</div>
+        <tr><td style="padding-top:20px">
+          <div style="color:#6b7280;font-size:14px;margin-bottom:6px">Besoin</div>
+          <div style="font-size:15px;line-height:1.5">${message}</div>
         </td></tr>
-        <tr><td style="padding:24px 28px">
-          <table role="presentation" cellpadding="0" cellspacing="0"><tr>
-            <td style="background:#1f5ad6;border-radius:8px"><a href="mailto:${e.email}?subject=${replySubject}" style="display:inline-block;padding:12px 20px;color:#ffffff;font-weight:700;font-size:14px;text-decoration:none">Répondre au client</a></td>
-            <td style="width:10px"></td>
-            <td style="border:1px solid #1f5ad6;border-radius:8px"><a href="tel:${tel}" style="display:inline-block;padding:11px 20px;color:#1f5ad6;font-weight:700;font-size:14px;text-decoration:none">Appeler</a></td>
-          </tr></table>
-        </td></tr>
-        <tr><td style="background:#f5f8fc;padding:14px 28px;color:#7a8aa3;font-size:12px;border-top:1px solid #e6edf6">
-          Envoyé le ${escapeHtml(when)} depuis le formulaire de devis. Le bouton « Répondre » de votre messagerie écrit directement au client.
+        <tr><td style="padding-top:28px;color:#6b7280;font-size:12px">
+          Reçu le ${escapeHtml(when)}. Pour répondre au client, utilisez « Répondre » : la réponse part directement à son adresse.
         </td></tr>
       </table>
     </td></tr>
