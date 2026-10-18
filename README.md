@@ -4,16 +4,16 @@ Site vitrine d'**Alphanet Group**, entreprise de nettoyage professionnel à Mont
 depuis 2014 : entretien de bureaux, copropriétés et commerces, vitrerie, remise en état
 et après sinistre, principalement dans l'Hérault (34), en Occitanie et dans le Sud.
 
-[![Site en ligne](https://img.shields.io/badge/site-en%20ligne-1f5ad6?style=for-the-badge)](https://jonathan-bzr.github.io/alphanet-site/)
-[![Hébergé sur GitHub Pages](https://img.shields.io/badge/h%C3%A9berg%C3%A9%20sur-GitHub%20Pages-0c1a2e?style=for-the-badge&logo=github)](https://github.com/jonathan-bzr/alphanet-site/deployments)
+[![Site en ligne](https://img.shields.io/badge/site-en%20ligne-1f5ad6?style=for-the-badge)](https://alphanet-group.fr/)
+[![Hébergé sur Cloudflare Pages](https://img.shields.io/badge/h%C3%A9berg%C3%A9%20sur-Cloudflare%20Pages-0c1a2e?style=for-the-badge&logo=cloudflare)](https://alphanet-group.fr/)
 
 ## Liens
 
 | | |
 |---|---|
-| **Site en ligne** | https://jonathan-bzr.github.io/alphanet-site/ |
-| **Demande de devis** | https://jonathan-bzr.github.io/alphanet-site/#contact |
-| **Mentions légales et données personnelles** | https://jonathan-bzr.github.io/alphanet-site/mentions-legales.html |
+| **Site en ligne** | https://alphanet-group.fr/ |
+| **Demande de devis** | https://alphanet-group.fr/#contact |
+| **Mentions légales et données personnelles** | https://alphanet-group.fr/mentions-legales.html |
 | **Dépôt GitHub** | https://github.com/jonathan-bzr/alphanet-site |
 | **Historique des mises en ligne** | https://github.com/jonathan-bzr/alphanet-site/deployments |
 
@@ -60,18 +60,14 @@ Et aussi : **mode clair / sombre** (bouton rond lune / soleil en bas à droite d
   (voir `assets/js/theme.js`).
 - **Formulaire assaini** : les caractères de contrôle (retours à la ligne cachés, etc.) sont retirés
   des champs avant de préparer l'e-mail, et le pré-remplissage par lien n'accepte qu'une liste fixe de valeurs.
-- Connexion chiffrée (HTTPS) assurée par GitHub Pages.
-- **Hébergement Cloudflare Pages (prévu)** : le fichier `_headers` envoie les en-têtes de sécurité
-  (anti-cadre, `Permissions-Policy`, HSTS…) dès que le site est servi par Cloudflare.
-- **Ce que GitHub Pages ne permet pas** : envoyer des en-têtes de sécurité (`X-Frame-Options`,
-  `frame-ancestors`, `Permissions-Policy`). C'est compensé par ce qui précède. Si un jour ces en-têtes
-  deviennent importants, il faudra passer par un hébergeur qui les permet (Cloudflare Pages, Netlify).
+- Connexion chiffrée (HTTPS) assurée par Cloudflare.
+- **En-têtes de sécurité** : le fichier `_headers` envoie la politique de sécurité, l'anti-cadre,
+  `Permissions-Policy`, HSTS, etc. sur chaque page servie par Cloudflare Pages.
 - **Référencement** : titres et descriptions propres à chaque page, données structurées
   (entreprise locale, services, fil d'Ariane), `sitemap.xml` et `robots.txt`.
 - Voir aussi `SECURITY.md` (comment signaler un problème).
 - Le point le plus important de votre côté : activer la **double authentification** sur le
-  compte GitHub qui publie le site. Dans les réglages du dépôt, vérifier aussi que **Enforce HTTPS**
-  est coché (Settings > Pages) et protéger la branche `main` contre les suppressions et les
+  compte GitHub, sur le compte Cloudflare et sur le compte OVHcloud. Dans les réglages du dépôt, protéger la branche `main` contre les suppressions et les
   réécritures forcées (Settings > Branches).
 
 ## Structure du dépôt
@@ -88,7 +84,7 @@ Et aussi : **mode clair / sombre** (bouton rond lune / soleil en bas à droite d
 | `assets/img/fond/` | Fonds d'image (version claire et sombre, ordinateur et téléphone) |
 | `assets/img/logo/` | Logo : couleur, blanc (fonds foncés), pictogramme, PNG |
 | `assets/img/og-image.jpg` | Image affichée quand on partage le lien (WhatsApp, LinkedIn…) |
-| `.nojekyll` | Publie les fichiers tels quels sur GitHub Pages |
+| `.nojekyll` | Publie les fichiers tels quels (ancienne adresse GitHub Pages) |
 
 Site statique en HTML, CSS et JavaScript, sans dépendance ni outil de compilation.
 Le menu et le pied de page sont écrits dans chaque page : pour les changer, modifier les six fichiers `.html`.
@@ -112,14 +108,17 @@ Le menu et le pied de page sont écrits dans chaque page : pour les changer, mod
 
 ## Mise en ligne
 
-Le site est hébergé gratuitement sur **GitHub Pages**, à partir de la branche `main`.
+Le site est hébergé gratuitement sur **Cloudflare Pages** (projet `alphanet-site`), à partir de la branche `main`,
+avec le nom de domaine **alphanet-group.fr** (acheté chez OVHcloud, DNS gérés par Cloudflare).
 Chaque modification envoyée sur `main` met le site en ligne à jour automatiquement,
-en une à deux minutes.
+en une à deux minutes. Les en-têtes de sécurité sont dans `_headers`.
 
 ## À compléter
 
 - [x] Adresse e-mail de contact : jbezara739@gmail.com (formulaire et mentions légales), à remplacer par une adresse professionnelle si besoin
-- [ ] Nom de domaine : une fois choisi, remplacer `https://jonathan-bzr.github.io/alphanet-site/` dans les pages, `sitemap.xml` et `robots.txt`, puis déclarer le site dans Google Search Console
+- [x] Nom de domaine : alphanet-group.fr
+- [ ] Déclarer le site dans Google Search Console
+- [ ] Passer le formulaire et les mentions légales sur contact@alphanet-group.fr une fois la boîte créée
 - [ ] Relire les textes des pages (histoire, valeurs, détail des services, engagements) et corriger ce qui ne correspond pas à la réalité
 - [ ] Certifications éventuelles (ISO 9001, Qualipropre, FEP...), à afficher avec leur logo officiel
 - [ ] Chiffres supplémentaires exacts (sites entretenus, agents, clients) et photos réelles des interventions

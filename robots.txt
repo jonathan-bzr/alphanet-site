@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://jonathan-bzr.github.io/alphanet-site/sitemap.xml
+Sitemap: https://alphanet-group.fr/sitemap.xml

@@ -17,7 +17,7 @@ Si vous pensez avoir trouvé une faille, merci de **ne pas la publier** : écriv
 - Sortie automatique du cadre si la page est affichée dans un autre site.
 - Aucun secret (mot de passe, clé) dans le dépôt : à ne jamais en ajouter.
 
-## Limites de l'hébergement
+## Hébergement
 
-GitHub Pages n'autorise pas les en-têtes HTTP personnalisés (`X-Frame-Options`, `frame-ancestors`,
-`Permissions-Policy`). Voir le README pour les mesures de compensation.
+Le site est servi par Cloudflare Pages. Les en-têtes HTTP de sécurité (`Content-Security-Policy`,
+`X-Frame-Options`, `Permissions-Policy`, HSTS…) sont définis dans le fichier `_headers`.
