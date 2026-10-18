@@ -2,7 +2,7 @@
 
 Site vitrine d'**Alphanet Group**, entreprise de nettoyage professionnel à Montpellier
 depuis 2014 : entretien de bureaux, copropriétés et commerces, vitrerie, remise en état
-et après sinistre, dans l'Hérault (34) et ses alentours, en Occitanie.
+et après sinistre, principalement dans l'Hérault (34), en Occitanie et dans le Sud.
 
 [![Site en ligne](https://img.shields.io/badge/site-en%20ligne-1f5ad6?style=for-the-badge)](https://jonathan-bzr.github.io/alphanet-site/)
 [![Hébergé sur GitHub Pages](https://img.shields.io/badge/h%C3%A9berg%C3%A9%20sur-GitHub%20Pages-0c1a2e?style=for-the-badge&logo=github)](https://github.com/jonathan-bzr/alphanet-site/deployments)
@@ -26,7 +26,7 @@ et après sinistre, dans l'Hérault (34) et ses alentours, en Occitanie.
 | Activité | Nettoyage courant des bâtiments (APE 81.21Z) |
 | Siège | Montpellier (34070) |
 | Téléphone | [07 58 34 04 07](tel:+33758340407) |
-| Secteur | L'Hérault (34) et ses alentours, en Occitanie |
+| Secteur | Principalement l'Hérault (34), mais aussi toute l'Occitanie et le Sud de la France |
 
 ## Le site en bref
 
@@ -97,7 +97,7 @@ Le menu et le pied de page sont écrits dans chaque page : pour les changer, mod
 - **Chiffres de l'accueil** : bloc « Alphanet en bref » (accueil et page Entreprise). Le chiffre des
   années d'expérience se met à jour tout seul chaque année (date de création : 10 avril 2014). Ne mettre
   que des chiffres exacts.
-- **Zone d'intervention** : textes des pages Entreprise et Contact (« l'Hérault (34) et ses alentours, en Occitanie »).
+- **Zone d'intervention** : textes des pages Entreprise et Contact (« principalement dans l'Hérault (34), mais aussi partout en Occitanie et dans les autres régions du Sud »).
 - **Adresse e-mail du formulaire** : dans `assets/js/main.js`, `emailUser` (avant le @) et
   `emailDomain` (après le @), à reporter aussi dans `mentions-legales.html`. Aucune clé ni mot de passe
   n'est nécessaire : le formulaire ouvre la messagerie du visiteur avec la demande pré-remplie.
