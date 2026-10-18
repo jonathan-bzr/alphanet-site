@@ -481,6 +481,11 @@ html.menu-lock { overflow: hidden; }
 .hero-bubbles span:nth-child(5) { --x: 62%; --y: 44%; --d: 14s; --w: -9s; }
 .hero-bubbles span:nth-child(6) { --x: 48%; --y: 80%; --d: 12s; --w: -5s; }
 .hero-bubbles span:nth-child(7) { --x: 80%; --y: 32%; --d: 13s; --w: -2s; }
+.hero-bubbles span:nth-child(8)  { --x: 74%; --y: 88%; --d: 15s; --w: -8s; }
+.hero-bubbles span:nth-child(9)  { --x: 97%; --y: 80%; --d: 19s; --w: -11s; }
+.hero-bubbles span:nth-child(10) { --x: 66%; --y: 30%; --d: 12s; --w: -4s; }
+.hero-bubbles span:nth-child(11) { --x: 99%; --y: 33%; --d: 14s; --w: -6s; }
+.hero-bubbles span:nth-child(12) { --x: 58%; --y: 90%; --d: 23s; --w: -14s; }
 /* Téléphone : quatre bulles plus petites, sur les bords pour ne pas gêner la lecture */
 @media (max-width: 899px) {
   .hero-bubbles span { --s: 84px; }
