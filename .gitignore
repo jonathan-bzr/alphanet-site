@@ -10,3 +10,4 @@ desktop.ini
 *.log
 node_modules/
 .wrangler/
+__pycache__/
