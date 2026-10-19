@@ -19,3 +19,9 @@
   X-Robots-Tag: noindex
 /SECURITY.md
   X-Robots-Tag: noindex
+/CLAUDE.md
+  X-Robots-Tag: noindex
+/outils/*
+  X-Robots-Tag: noindex
+/functions/*
+  X-Robots-Tag: noindex

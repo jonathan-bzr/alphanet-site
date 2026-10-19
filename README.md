@@ -86,6 +86,9 @@ Et aussi : **mode clair / sombre** (bouton rond lune / soleil en bas à droite d
 | `assets/img/fond/` | Fonds d'image (version claire et sombre, ordinateur et téléphone) |
 | `assets/img/logo/` | Logo « A » au trait de raclette : couleur, blanc (fonds foncés), noir (une couleur), pictogramme, SVG et PNG |
 | `assets/img/og-image.jpg` | Image affichée quand on partage le lien (WhatsApp, LinkedIn…) |
+| `functions/api/devis.js` | Envoi du formulaire de devis vers contact@ (Cloudflare) |
+| `outils/` | Générateur des pages, tests et logo (mode d'emploi dans `outils/README.md`) |
+| `CLAUDE.md` | Consignes du projet pour Claude |
 | `.nojekyll` | Publie les fichiers tels quels (ancienne adresse GitHub Pages) |
 
 Site statique en HTML, CSS et JavaScript, sans dépendance ni outil de compilation.
