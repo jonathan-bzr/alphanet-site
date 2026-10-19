@@ -36,7 +36,7 @@
   CSP stricte avec Trusted Types (pas de `innerHTML`, pas de script ni style en ligne).
   Ajouter un tiers impose de modifier la CSP (`csp.html` + `_headers`) et les mentions légales.
 - Style voulu : professionnel, sobre, vivant mais pas « IA » (pas de dégradés ni d'étincelles,
-  mail de devis en noir et blanc). Logo : « A » coupé d'un trait de raclette, bleu marine
-  `#0b1f3a` + bleu `#1f5ad6` (`outils/logo/final.py`).
+  mail de devis en noir et blanc). Logo : écusson bleu marine `#0b1f3a`, « A » blanc,
+  vague bleue `#1f5ad6` (`outils/logo/final.py`, choisi le 19/10/2026 ; ancien logo : `raclette.py`).
 - S'inspirer de sites concurrents sans jamais copier textes, images, code ou logos.
 - Ne jamais ajouter de secret (mot de passe, clé) au dépôt : il est public.

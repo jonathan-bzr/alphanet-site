@@ -9,7 +9,7 @@ la règle de sécurité (`csp.html`), les données Google (`jsonld.html`) et le 
 légales (`legal-main.html`).
 
 ```bash
-python3 outils/generer/build.py . 20261018-7   # racine du dépôt, puis numéro de version ?v=
+python3 outils/generer/build.py . 20261019-1   # racine du dépôt, puis numéro de version ?v=
 ```
 
 - Toujours modifier `build.py` (ou les fichiers à côté), jamais les `.html` à la main : la
@@ -38,7 +38,7 @@ d'erreurs. Tout doit être `OK`.
 
 ## Logo (`logo/`)
 
-`final.py` dessine le logo (« A » coupé par un trait de raclette) et écrit les SVG, l'icône
+`final.py` dessine le logo (écusson, « A » blanc, vague bleue ; l'ancien « A » à la raclette est dans `raclette.py`) et écrit les SVG, l'icône
 d'onglet et le symbole à coller dans `build.py` (`site-symbol.html`).
 
 ```bash

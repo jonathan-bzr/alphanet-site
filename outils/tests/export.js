@@ -21,7 +21,7 @@ const path = require('path');
   await shotSvg(img('favicon.svg'), 180, 180, path.join(R, 'assets/img/apple-touch-icon.png'));
   await shotSvg(img('favicon.svg'), 512, 512, path.join(R, 'assets/img/logo/logo-icone-app-512.png'));
   // logo en PNG (fond transparent), 1200 px de large
-  const ratio = 266.4 / 64;
+  const ratio = 260 / 64;  // largeur du viewBox de logo-couleur.svg
   await shotSvg(img('logo/logo-couleur.svg'), 1200, Math.round(1200 / ratio), path.join(R, 'assets/img/logo/logo-couleur.png'));
   await shotSvg(img('logo/logo-blanc.svg'), 1200, Math.round(1200 / ratio), path.join(R, 'assets/img/logo/logo-blanc.png'));
   await shotSvg(img('logo/logo-noir.svg'), 1200, Math.round(1200 / ratio), path.join(R, 'assets/img/logo/logo-noir.png'));

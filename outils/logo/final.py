@@ -1,5 +1,5 @@
-"""Logo définitif Alphanet Group : « A » coupé par un trait de raclette.
-Formes calculées (pas de masque) pour rester lisibles partout : site, mails, logiciels.
+"""Logo définitif Alphanet Group : écusson bleu marine, « A » blanc, vague bleue (raclette).
+Formes calculées (pas de masque ni de trait SVG) pour rester lisibles partout : site, mails, logiciels.
 Usage : python3 outils/logo/final.py <archivo-latin-wdth-normal.woff2> <dossier de sortie>
 La police vient du paquet npm @fontsource-variable/archivo (licence SIL OFL)."""
 import sys, importlib.util, math
@@ -14,43 +14,46 @@ g = importlib.util.module_from_spec(spec); spec.loader.exec_module(g)
 A800 = instancer.instantiateVariableFont(TTFont(ARCH), {'wght': 800, 'wdth': 125})
 A600 = instancer.instantiateVariableFont(TTFont(ARCH), {'wght': 600, 'wdth': 125})
 
-# --- Géométrie du pictogramme (repère 64 x 64) ------------------------------
-X0, X1 = 1.0, 63.0            # extrémités du trait
-Y_TOP0, Y_TOP1 = 42.0, 34.0   # bord haut du trait, à gauche puis à droite
-THICK = 7.5                   # épaisseur verticale du trait
-GAP = 2.4                     # espace entre le trait et le « A »
-slope = (Y_TOP1 - Y_TOP0) / (X1 - X0)
-cosang = 1 / math.sqrt(1 + slope ** 2)
-off = GAP / cosang            # décalage vertical équivalent à l'espace perpendiculaire
+# --- Géométrie du pictogramme (repère 64 x 64, centré sur x = 32) ----------------
+SL, SR = 3.7, 60.3            # bords gauche et droit de l'écusson
+CORNER, SIDE = 7.5, 31.5      # hauteur des coins du haut, fin de la partie droite des côtés
+SHIELD_D = (f'M32 0L{SR} {CORNER}V{SIDE}C{SR} 46 46 57 32 64C18 57 {SL} 46 {SL} {SIDE}V{CORNER}Z')
 
-def top(x): return Y_TOP0 + slope * (x - X0)
+# Le « A » : sommet plat, sans barre (la vague la remplace).
+A_POLY = [(28.3, 12.3), (35.7, 12.3), (49.25, 51.6), (41, 51.6), (32, 25.3), (23, 51.6), (14.75, 51.6)]
 
-# Le « A » en deux jambages convexes (ils se recouvrent un peu au milieu pour éviter tout liseré).
-LEFT = [(26.2, 4), (32.4, 4), (32.4, 21.5 - 1.05), (17.4, 60), (4, 60)]
-RIGHT = [(64 - x, y) for (x, y) in LEFT][::-1]
+# La vague : une période de sinusoïde, épaisse, bouts arrondis.
+WX0, WX1 = 12.15, 52.45       # début et fin de la ligne médiane
+WY, WAMP, WPER, WPH = 42.35, 2.05, 27.67, 14.26
+WTHICK = 6.0
 
-def clip(poly, keep):
-    """Sutherland-Hodgman sur un demi-plan défini par keep(x, y) -> valeur signée (>= 0 gardé)."""
-    out = []
-    n = len(poly)
-    for i in range(n):
-        p, q = poly[i], poly[(i + 1) % n]
-        fp, fq = keep(*p), keep(*q)
-        if fp >= 0: out.append(p)
-        if (fp >= 0) != (fq >= 0):
-            t = fp / (fp - fq)
-            out.append((p[0] + t * (q[0] - p[0]), p[1] + t * (q[1] - p[1])))
-    return out
+def wave_y(x): return WY - WAMP * math.sin(2 * math.pi * (x - WPH) / WPER)
+def wave_dy(x): return -WAMP * 2 * math.pi / WPER * math.cos(2 * math.pi * (x - WPH) / WPER)
 
-above = lambda x, y: (top(x) - off) - y                 # au-dessus du trait (moins l'espace)
-below = lambda x, y: y - (top(x) + THICK + off)          # en dessous du trait (plus l'espace)
+def wave_poly(n=80, cap=12):
+    """Contour plein de la vague : bord haut, bout arrondi, bord bas, bout arrondi."""
+    h = WTHICK / 2
+    def normal(x):
+        dx, dy = 1, wave_dy(x); l = math.hypot(dx, dy)
+        return -dy / l, dx / l       # normale vers le bas (y croît vers le bas)
+    xs = [WX0 + (WX1 - WX0) * i / n for i in range(n + 1)]
+    upper = [(x - normal(x)[0] * h, wave_y(x) - normal(x)[1] * h) for x in xs]
+    lower = [(x + normal(x)[0] * h, wave_y(x) + normal(x)[1] * h) for x in xs]
+    def capf(x, sign):
+        nx, ny = normal(x); a0 = math.atan2(-ny, -nx)   # part du bord haut
+        return [(x + h * math.cos(a0 + sign * math.pi * k / cap), wave_y(x) + h * math.sin(a0 + sign * math.pi * k / cap))
+                for k in range(1, cap)]
+    return upper + capf(WX1, 1) + lower[::-1] + capf(WX0, -1)[::-1]
 
-def d(poly):
-    return 'M' + ' '.join(f'{x:.2f} {y:.2f}' for x, y in poly) + 'Z'
+def d(poly, dx=0.0):
+    return 'M' + ' '.join(f'{x + dx:.2f} {y:.2f}' for x, y in poly) + 'Z'
 
-pieces = [clip(p, above) for p in (LEFT, RIGHT)] + [clip(p, below) for p in (LEFT, RIGHT)]
-A_D = ''.join(d(p) for p in pieces if len(p) >= 3)
-BAND_D = d([(X0, top(X0)), (X1, top(X1)), (X1, top(X1) + THICK), (X0, top(X0) + THICK)])
+def shield_d(dx=0.0):
+    if not dx: return SHIELD_D
+    return (f'M{32 + dx:.2f} 0L{SR + dx:.2f} {CORNER}V{SIDE}C{SR + dx:.2f} 46 {46 + dx:.2f} 57 {32 + dx:.2f} 64'
+            f'C{18 + dx:.2f} 57 {SL + dx:.2f} 46 {SL + dx:.2f} {SIDE}V{CORNER}Z')
+
+WAVE = wave_poly()
 
 # --- Texte vectorisé ------------------------------------------------------------
 def wordmark(tx):
@@ -67,34 +70,39 @@ def wordmark(tx):
     rule = (x_rule, base2 - ssize * .74 / 2 - .65, tx + w1v - x_rule, 1.3)
     return d1, d2, rule, tx + w1v
 
-TX = 64 + 16
+DX = -SL                      # dans le logo complet, l'écusson touche le bord gauche
+TX = round(SR - SL + 17, 1)
 D1, D2, RULE, RIGHT_EDGE = wordmark(TX)
 W = round(RIGHT_EDGE + 1, 1)
 
 COLORS = {
-    'couleur': dict(ink='#0b1f3a', blue='#1f5ad6', sub='#1f5ad6'),
-    'blanc':   dict(ink='#ffffff', blue='#7aa7ff', sub='#a9c6ff'),
-    'noir':    dict(ink='#000000', blue='#000000', sub='#000000'),
+    'couleur': dict(shield='#0b1f3a', a='#ffffff', wave='#1f5ad6', ink='#0b1f3a', sub='#1f5ad6'),
+    'blanc':   dict(shield='#ffffff', a='#0b1f3a', wave='#7aa7ff', ink='#ffffff', sub='#a9c6ff'),
+    # une seule encre : le blanc est le papier, la vague coupe le « A »
+    'noir':    dict(shield='#000000', a='#ffffff', wave='#000000', ink='#000000', sub='#000000'),
 }
+
+def picto(c, dx=0.0):
+    return (f'<path fill="{c["shield"]}" d="{shield_d(dx)}"/>\n<path fill="{c["a"]}" d="{d(A_POLY, dx)}"/>\n'
+            f'<path fill="{c["wave"]}" d="{d(WAVE, dx)}"/>\n')
 
 def lockup_svg(c):
     rx, ry, rw, rh = RULE
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} 64" role="img" aria-labelledby="t">\n'
-            f'<title id="t">Alphanet Group</title>\n'
-            f'<path fill="{c["ink"]}" d="{A_D}"/>\n<path fill="{c["blue"]}" d="{BAND_D}"/>\n'
+            f'<title id="t">Alphanet Group</title>\n' + picto(c, DX) +
             f'<path fill="{c["ink"]}" d="{D1}"/>\n<path fill="{c["sub"]}" d="{D2}"/>\n'
             f'<rect fill="{c["sub"]}" x="{rx:.2f}" y="{ry:.2f}" width="{rw:.2f}" height="{rh}"/>\n</svg>\n')
 
 def icon_svg(c):
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="t">\n'
-            f'<title id="t">Alphanet Group</title>\n'
-            f'<path fill="{c["ink"]}" d="{A_D}"/>\n<path fill="{c["blue"]}" d="{BAND_D}"/>\n</svg>\n')
+            f'<title id="t">Alphanet Group</title>\n' + picto(c) + '</svg>\n')
 
-# Icône d'onglet / d'appli : carré bleu marine, « A » blanc, trait bleu clair.
+# Icône d'onglet / d'appli : carré bleu marine, écusson blanc, « A » bleu marine, vague bleu clair.
 TILE = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">\n'
         f'<rect width="64" height="64" rx="14" fill="#0b1f3a"/>\n'
-        f'<g transform="translate(32 32.5) scale(.72) translate(-32 -32)">'
-        f'<path fill="#ffffff" d="{A_D}"/><path fill="#6f9dff" d="{BAND_D}"/></g>\n</svg>\n')
+        f'<g transform="translate(32 32) scale(.78) translate(-32 -32)">'
+        f'<path fill="#ffffff" d="{SHIELD_D}"/><path fill="#0b1f3a" d="{d(A_POLY)}"/>'
+        f'<path fill="#5b8cf0" d="{d(WAVE)}"/></g>\n</svg>\n')
 
 for name, c in COLORS.items():
     open(f'{OUT}/logo-{name}.svg', 'w').write(lockup_svg(c))
@@ -104,7 +112,9 @@ open(f'{OUT}/favicon.svg', 'w').write(TILE)
 # Symbole pour le site : couleurs prises dans les variables CSS (thème clair / sombre).
 rx, ry, rw, rh = RULE
 SITE = (f'      <symbol id="logo" viewBox="0 0 {W} 64">\n'
-        f'        <path class="logo-ink" d="{A_D}"/>\n        <path class="logo-blue" d="{BAND_D}"/>\n'
+        f'        <path class="logo-ink" d="{shield_d(DX)}"/>\n'
+        f'        <path class="logo-paper" d="{d(A_POLY, DX)}"/>\n'
+        f'        <path class="logo-blue" d="{d(WAVE, DX)}"/>\n'
         f'        <path class="logo-ink" d="{D1}"/>\n        <path class="logo-sub" d="{D2}"/>\n'
         f'        <rect class="logo-sub" x="{rx:.2f}" y="{ry:.2f}" width="{rw:.2f}" height="{rh}"/>\n'
         f'      </symbol>\n')

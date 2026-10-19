@@ -42,8 +42,9 @@
   --danger: #c62828;
   --focus: rgb(31 90 214 / .28);
 
-  --logo-ink: #0b1f3a;         /* logo : « A » et ALPHANET */
-  --logo-blue: #1f5ad6;        /* logo : trait de raclette et GROUP */
+  --logo-ink: #0b1f3a;         /* logo : écusson et ALPHANET */
+  --logo-blue: #1f5ad6;        /* logo : vague et GROUP */
+  --logo-paper: #ffffff;       /* logo : « A » dans l'écusson */
 
   --header-bg: rgb(255 255 255 / .82);
   --chip-bg: rgb(255 255 255 / .62);
@@ -101,6 +102,7 @@
 
   --logo-ink: #ffffff;
   --logo-blue: #7aa7ff;
+  --logo-paper: #0c1a30;
 
   --header-bg: rgb(12 26 48 / .82);
   --chip-bg: rgb(20 40 67 / .8);
@@ -167,6 +169,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .logo-ink { fill: var(--logo-ink); }
 .logo-blue, .logo-sub { fill: var(--logo-blue); }
+.logo-paper { fill: var(--logo-paper); }
 
 .skip-link {
   position: fixed; z-index: 100; top: .75rem; left: .75rem;
@@ -274,8 +277,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 
 .brand { display: inline-flex; align-items: center; gap: .75rem; color: var(--text); text-decoration: none; }
-/* Logo complet (pictogramme + ALPHANET GROUP), proportions 266,4 x 64 */
-.brand-logo { display: block; height: 46px; width: calc(46px * 266.4 / 64); }
+/* Logo complet (pictogramme + ALPHANET GROUP), proportions 260 x 64 */
+.brand-logo { display: block; height: 46px; width: calc(46px * 260 / 64); }
 
 .nav { margin-left: auto; }
 .nav-list { display: flex; gap: .15rem; }
@@ -340,7 +343,7 @@ html.menu-lock { overflow: hidden; }
 @media (max-width: 520px) {
   :root { --header-h: 66px; }
   .header-cta { display: none; }
-  .brand-logo { height: 38px; width: calc(38px * 266.4 / 64); }
+  .brand-logo { height: 38px; width: calc(38px * 260 / 64); }
 }
 
 
