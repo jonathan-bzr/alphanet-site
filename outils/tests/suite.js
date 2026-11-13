@@ -1,10 +1,13 @@
-// Tests du site : node outils/tests/suite.js http://127.0.0.1:8766/ <chemin vers axe.min.js>
+// Tests du site : python3 outils/tests/serve.py (imite Cloudflare Pages), puis
+// node outils/tests/suite.js http://127.0.0.1:8766/ <chemin vers axe.min.js>
 const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
 const assert = (cond, msg) => { console.log(`${cond ? 'OK  ' : 'FAIL'} ${msg}`); if (!cond) process.exitCode = 1; };
 const PAGES = ['index', 'entreprise', 'services', 'engagements', 'contact', 'mentions-legales'];
 const ROOT = path.resolve(__dirname, '..', '..');
+// Adresse publique d'une page : sans « .html » (comme sur Cloudflare Pages)
+const url = (p) => (p === 'index' ? '' : p);
 
 (async () => {
   const [base, axePath] = process.argv.slice(2);
@@ -22,7 +25,8 @@ const ROOT = path.resolve(__dirname, '..', '..');
     for (const m of html.matchAll(/href="([^"#?]*)(\?[^"#]*)?(#[^"]*)?"/g)) {
       const [, file, , hash] = m;
       if (/^(https?:|tel:|mailto:)/.test(file) || (!file && !hash)) continue;
-      const target = file || `${p}.html`;
+      if (/\.html$/.test(file)) { badLinks.push(`${p}: lien en .html (${file}) au lieu de l’adresse sans extension`); continue; }
+      const target = !file ? `${p}.html` : file === './' ? 'index.html' : /\.[a-z0-9]+$/.test(file) ? file : `${file}.html`;
       if (!fs.existsSync(path.join(ROOT, target))) { badLinks.push(`${p}: ${target} introuvable`); continue; }
       if (hash && !(ids[target] && ids[target].has(hash.slice(1)))) badLinks.push(`${p}: ${target}${hash} introuvable`);
     }
@@ -42,26 +46,26 @@ const ROOT = path.resolve(__dirname, '..', '..');
   const errors = [];
   page.on('console', (m) => { if (['error', 'warning'].includes(m.type())) errors.push(m.text()); });
   page.on('pageerror', (e) => errors.push(e.message));
-  await page.goto(`${base}index.html`, { waitUntil: 'networkidle' });
+  await page.goto(`${base}`, { waitUntil: 'networkidle' });
   assert(await page.evaluate(() => document.documentElement.dataset.theme) === 'light', 'appareil en sombre : le site s’ouvre en clair');
   await page.click('.theme-fab'); await page.waitForTimeout(600);
   assert(await page.evaluate(() => document.documentElement.dataset.theme) === 'dark', 'bouton : passage en sombre');
-  await page.goto(`${base}services.html`, { waitUntil: 'networkidle' });
+  await page.goto(`${base}services`, { waitUntil: 'networkidle' });
   assert(await page.evaluate(() => document.documentElement.dataset.theme) === 'dark', 'le choix sombre suit sur les autres pages');
   await page.click('.theme-fab'); await page.waitForTimeout(600);
   assert(await page.evaluate(() => document.documentElement.dataset.theme) === 'light', 'retour en clair');
 
   // ---------- Menu : page active, 5 liens ----------
   for (const p of PAGES.slice(0, 5)) {
-    await page.goto(`${base}${p}.html`, { waitUntil: 'networkidle' });
+    await page.goto(`${base}${url(p)}`, { waitUntil: 'networkidle' });
     const cur = await page.$$eval('.nav-list a[aria-current="page"]', (a) => a.map((x) => x.getAttribute('href')));
-    assert(cur.length === 1 && cur[0] === `${p}.html`, `${p} : lien actif du menu = ${cur.join(',')}`);
+    assert(cur.length === 1 && cur[0] === (p === 'index' ? './' : p), `${p} : lien actif du menu = ${cur.join(',')}`);
   }
   const navHrefs = await page.$$eval('.nav-list a', (a) => a.map((x) => x.getAttribute('href')));
   assert(navHrefs.length === 5, `menu : ${navHrefs.join(', ')}`);
 
   // ---------- Chiffres clés ----------
-  await page.goto(`${base}index.html`, { waitUntil: 'networkidle' });
+  await page.goto(`${base}`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(1800);
   const nums = await page.$$eval('[data-count]', (e) => e.map((x) => x.textContent));
   const years = new Date().getFullYear() - 2014 - (new Date() < new Date(new Date().getFullYear(), 3, 10) ? 1 : 0);
@@ -91,8 +95,13 @@ const ROOT = path.resolve(__dirname, '..', '..');
     const idx = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
     assert((idx.match(/service--featured/g) || []).length === 2, 'accueil : Bureaux et Hôtellerie mis en avant');
     assert(fs.existsSync(path.join(ROOT, 'robots.txt')) && /Sitemap:/.test(fs.readFileSync(path.join(ROOT, 'robots.txt'), 'utf8')), 'robots.txt avec le plan du site');
+    const sitemap = fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8');
     for (const p of PAGES) {
       const t = fs.readFileSync(path.join(ROOT, `${p}.html`), 'utf8');
+      const canon = (t.match(/<link rel="canonical" href="([^"]+)"/) || [])[1];
+      assert(canon === `https://alphanet-group.fr/${url(p)}`, `${p} : adresse canonique sans .html (${canon})`);
+      if (p !== 'mentions-legales') assert(sitemap.includes(`<loc>${canon}</loc>`), `${p} : présente dans le sitemap`);
+      assert(!/alphanet-group\.fr\/[a-z-]+\.html/.test(t), `${p} : aucune adresse en .html dans les données Google`);
       for (const m of t.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
         let ok = true; try { JSON.parse(m[1]); } catch (e) { ok = false; }
         assert(ok, `${p} : données structurées JSON valides`);
@@ -102,27 +111,39 @@ const ROOT = path.resolve(__dirname, '..', '..');
       assert(d.length >= 70 && d.length <= 230, `${p} : description ${d.length} caractères`);
     }
   }
-  await page.goto(`${base}index.html`, { waitUntil: 'networkidle' });
+  await page.goto(`${base}`, { waitUntil: 'networkidle' });
   assert(await page.$$eval('[data-theme-toggle]', (e) => e.length) === 1 && await page.$eval('.theme-fab', (b) => getComputedStyle(b).position === 'fixed'), 'un seul bouton clair / sombre, flottant');
   await page.evaluate(() => window.scrollTo({ top: 1500, behavior: 'instant' })); await page.waitForTimeout(400);
   await page.reload({ waitUntil: 'networkidle' }); await page.waitForTimeout(500);
   assert(await page.evaluate(() => Math.round(window.scrollY)) === 0, 'rechargement : la page repart du haut');
-  await page.goto(`${base}services.html#vitrerie`, { waitUntil: 'networkidle' }); await page.waitForTimeout(900);
+  await page.goto(`${base}services#vitrerie`, { waitUntil: 'networkidle' }); await page.waitForTimeout(900);
   const vit = await page.evaluate(() => ({ y: Math.round(window.scrollY), top: Math.round(document.getElementById('vitrerie').getBoundingClientRect().top), h: document.querySelector('.site-header').offsetHeight }));
   assert(vit.y > 0 && vit.top >= 0 && vit.top < vit.h + 40, `lien avec ancre : arrive sous l’en-tête (${JSON.stringify(vit)})`);
   // la page ne se laisse pas encadrer
   const framed = await browser.newContext({ viewport: { width: 800, height: 600 } });
   const fp = await framed.newPage();
-  await fp.route(`${base}frame-test.html`, (r) => r.fulfill({ contentType: 'text/html', body: `<iframe src="index.html" width="700" height="500"></iframe>` }));
+  await fp.route(`${base}frame-test.html`, (r) => r.fulfill({ contentType: 'text/html', body: `<iframe src="./" width="700" height="500"></iframe>` }));
   await fp.goto(`${base}frame-test.html`, { waitUntil: 'load' }); await fp.waitForTimeout(1000);
-  const fr = fp.frames().find((f) => f !== fp.mainFrame() && f.url().includes('index.html'));
-  assert(fp.url().endsWith('/index.html') && fp.frames().length === 1, 'page encadrée dans une autre page : le site sort du cadre (anti-clickjacking)');
+  const fr = fp.frames().find((f) => f !== fp.mainFrame() && f.url() === base);
+  assert(fp.url() === base && fp.frames().length === 1, 'page encadrée dans une autre page : le site sort du cadre (anti-clickjacking)');
   await framed.close();
 
+  // ---------- Page introuvable : vrai statut 404, non indexée ----------
+  {
+    const before = errors.length;
+    const r = await page.goto(`${base}page-qui-n-existe-pas/test`, { waitUntil: 'networkidle' });
+    assert(r.status() === 404 && /Page introuvable/.test(await page.title()), `adresse inconnue : statut ${r.status()} et page « introuvable »`);
+    assert(await page.$eval('meta[name="robots"]', (m) => m.content) === 'noindex', 'page 404 non indexée');
+    assert(await page.$eval('.site-header', (h) => getComputedStyle(h).position !== 'static'), 'page 404 mise en forme (CSS chargé)');
+    const r2 = await page.goto(`${base}entreprise.html`, { waitUntil: 'networkidle' });
+    assert(page.url() === `${base}entreprise` && r2.status() === 200, 'ancienne adresse en .html : redirigée vers l’adresse sans extension');
+    errors.splice(before, errors.length - before, ...errors.slice(before).filter((e) => !/status of 404/.test(e))); // le 404 voulu ci-dessus n'est pas une erreur
+  }
+
   // ---------- Formulaire : pré-remplissage et validation ----------
-  await page.goto(`${base}contact.html?prestation=vitrerie#formulaire`, { waitUntil: 'networkidle' });
+  await page.goto(`${base}contact?prestation=vitrerie#formulaire`, { waitUntil: 'networkidle' });
   assert(await page.$eval('#f-type', (s) => s.value) === 'Vitrerie', 'lien « devis » : prestation Vitrerie pré-remplie');
-  await page.goto(`${base}contact.html?prestation=<script>alert(1)</script>`, { waitUntil: 'networkidle' });
+  await page.goto(`${base}contact?prestation=<script>alert(1)</script>`, { waitUntil: 'networkidle' });
   assert(await page.$eval('#f-type', (s) => s.value) === '', 'paramètre inconnu ou piégé ignoré');
   await page.click('.form-submit button');
   const errs = await page.$$eval('.field-error', (e) => e.map((x) => x.textContent).filter(Boolean));
@@ -156,7 +177,7 @@ const ROOT = path.resolve(__dirname, '..', '..');
     await page.setViewportSize({ width: w, height: 900 });
     const bad = [];
     for (const p of PAGES) {
-      await page.goto(`${base}${p}.html`, { waitUntil: 'networkidle' });
+      await page.goto(`${base}${url(p)}`, { waitUntil: 'networkidle' });
       const o = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
       if (o > 0) bad.push(`${p}+${o}px`);
       if (w >= 1080) {
@@ -179,15 +200,15 @@ const ROOT = path.resolve(__dirname, '..', '..');
   // ---------- Mobile : menu et barre d'action ----------
   ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
   page = await ctx.newPage();
-  await page.goto(`${base}index.html`, { waitUntil: 'networkidle' });
+  await page.goto(`${base}`, { waitUntil: 'networkidle' });
   assert(await page.evaluate(() => !document.querySelector('[data-mobile-bar]').classList.contains('is-visible')), 'barre mobile cachée en haut');
   await page.click('[data-nav-toggle]');
   assert(await page.evaluate(() => document.querySelector('[data-menu]').classList.contains('is-open')), 'menu ouvert');
   const items = await page.$$eval('[data-menu] .menu-list a', (a) => a.map((x) => x.textContent.trim()));
   assert(items.join() === 'Accueil,Entreprise,Services,Engagements,Contact', `menu mobile : ${items.join(', ')}`);
   assert(await page.evaluate(() => getComputedStyle(document.documentElement).overflow === 'hidden'), 'menu ouvert : la page derrière ne défile plus');
-  await page.click('[data-menu] a[href="services.html"]');
-  await page.waitForURL('**/services.html');
+  await page.click('[data-menu] a[href="services"]');
+  await page.waitForURL('**/services');
   await page.evaluate(() => window.scrollTo(0, 900));
   await page.waitForTimeout(500);
   assert(await page.evaluate(() => document.querySelector('[data-mobile-bar]').classList.contains('is-visible')), 'barre mobile visible après défilement (page Services)');
@@ -202,7 +223,7 @@ const ROOT = path.resolve(__dirname, '..', '..');
   // ---------- Animations réduites et sans JavaScript ----------
   ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
   page = await ctx.newPage();
-  await page.goto(`${base}index.html`, { waitUntil: 'networkidle' });
+  await page.goto(`${base}`, { waitUntil: 'networkidle' });
   const hidden = await page.$$eval('.reveal', (e) => e.filter((x) => getComputedStyle(x).opacity !== '1').length);
   assert(hidden === 0, 'animations réduites : tout le contenu est visible immédiatement');
   assert((await page.$$eval('[data-count]', (e) => e.map((x) => x.textContent))).join() === `${years},6,1,34`, 'animations réduites : chiffres affichés directement');
@@ -210,7 +231,7 @@ const ROOT = path.resolve(__dirname, '..', '..');
   ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, javaScriptEnabled: false });
   page = await ctx.newPage();
   for (const p of PAGES.slice(0, 5)) {
-    await page.goto(`${base}${p}.html`, { waitUntil: 'networkidle' });
+    await page.goto(`${base}${url(p)}`, { waitUntil: 'networkidle' });
     const hid = await page.$$eval('.reveal', (e) => e.filter((x) => getComputedStyle(x).opacity !== '1').length);
     assert(hid === 0, `sans JavaScript (${p}) : contenu visible`);
   }
@@ -225,7 +246,7 @@ const ROOT = path.resolve(__dirname, '..', '..');
       if (scheme === 'dark') await page.addInitScript(() => { try { localStorage.setItem('alphanet-theme', 'dark'); } catch (e) {} });
       let total = 0; const detail = [];
       for (const p of PAGES) {
-        await page.goto(`${base}${p}.html`, { waitUntil: 'networkidle' });
+        await page.goto(`${base}${url(p)}`, { waitUntil: 'networkidle' });
         await page.addScriptTag({ content: axe });
         const res = await page.evaluate(async () => await window.axe.run(document, { runOnly: ['wcag2a', 'wcag2aa', 'wcag21aa', 'best-practice'] }));
         total += res.violations.length;

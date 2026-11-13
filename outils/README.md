@@ -15,6 +15,9 @@ python3 outils/generer/build.py . 20261019-1   # racine du dépôt, puis numéro
 - Toujours modifier `build.py` (ou les fichiers à côté), jamais les `.html` à la main : la
   prochaine génération écraserait la modification. Si une page a été modifiée à la main (par
   exemple via GitHub), reporter d'abord le changement dans `build.py`.
+- Les adresses publiques n'ont pas de `.html` (`/services`, `/contact`…) : Cloudflare Pages redirige
+  `/page.html` vers `/page`. `build.py` écrit les liens ainsi, ainsi que `404.html` et `sitemap.xml`
+  (la date d'une page n'y change que si son contenu a changé).
 - Après chaque changement du CSS ou du JS, passer un **nouveau numéro de version**
   (`AAAAMMJJ-N`) pour que les navigateurs rechargent les fichiers.
 
@@ -23,11 +26,11 @@ python3 outils/generer/build.py . 20261019-1   # racine du dépôt, puis numéro
 Il faut Node, `playwright` et `axe-core` (`npm i playwright axe-core` dans un dossier de travail).
 
 ```bash
-python3 -m http.server 8766          # à la racine du dépôt, dans un autre terminal
+python3 outils/tests/serve.py 8766   # à la racine du dépôt, dans un autre terminal (imite Cloudflare Pages)
 node outils/tests/suite.js http://127.0.0.1:8766/ <chemin>/axe-core/axe.min.js
 ```
 
-La suite vérifie liens, menu, formulaire, mode sombre, mobile, accessibilité (axe) et absence
+La suite vérifie liens, adresses sans `.html` (canonique, sitemap), page 404, menu, formulaire, mode sombre, mobile, accessibilité (axe) et absence
 d'erreurs. Tout doit être `OK`.
 
 - `export.js <racine>` : régénère les PNG du logo, les icônes, l'image de partage

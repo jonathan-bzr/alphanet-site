@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Génère les pages HTML du site Alphanet Group (en-tête, pied de page et menu identiques partout)."""
-import os, re, sys
+import datetime, os, re, sys
 
 GEN = os.path.dirname(os.path.abspath(__file__))
 # Usage : python3 outils/generer/build.py [racine du dépôt] <version ?v=>
@@ -13,6 +13,15 @@ TEL = 'tel:+33758340407'
 CSP = open(os.path.join(GEN, 'csp.html'), encoding='utf-8').read()
 JSONLD = open(os.path.join(GEN, 'jsonld.html'), encoding='utf-8').read()
 LEGAL_MAIN = open(os.path.join(GEN, 'legal-main.html'), encoding='utf-8').read()
+
+# Adresses publiques sans « .html » : Cloudflare Pages redirige /page.html vers /page.
+# Les liens, l'adresse canonique et le sitemap utilisent donc directement /page (une seule adresse par page pour Google).
+PAGE_RE = re.compile(r'href="(index|entreprise|services|engagements|contact|mentions-legales)\.html')
+
+
+def clean_url(page):
+    return '' if page == 'index.html' else page[:-5]
+
 
 NAV = [
     ('index.html', 'Accueil'),
@@ -73,7 +82,7 @@ WAVE = '<svg class="wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-
 
 
 def head(title, desc, page, extra='', robots=None, jsonld=''):
-    url = BASE + ('' if page == 'index.html' else page)
+    url = BASE + clean_url(page)
     og = f'''  <meta property="og:type" content="website">
   <meta property="og:locale" content="fr_FR">
   <meta property="og:site_name" content="Alphanet Group">
@@ -88,7 +97,7 @@ def head(title, desc, page, extra='', robots=None, jsonld=''):
 ''' if not robots else ''
     rb = f'  <meta name="robots" content="{robots}">\n' if robots else ''
     # Fil d'Ariane lisible par les moteurs de recherche (pages autres que l'accueil)
-    if page != 'index.html' and not jsonld:
+    if page not in ('index.html', '404.html') and not jsonld:
         crumb = {'entreprise.html': 'Entreprise', 'services.html': 'Services', 'engagements.html': 'Engagements', 'contact.html': 'Contact', 'mentions-legales.html': 'Mentions légales'}[page]
         jsonld = f'''  <script type="application/ld+json">
   {{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
@@ -341,10 +350,38 @@ def page_hero(title, lead, crumb, extra='', soft=False):
 '''
 
 
-def write(name, html):
-    with open(os.path.join(ROOT, name), 'w', encoding='utf-8') as f:
+CHANGED = {}
+
+
+def write(name, html, absolute=False):
+    html = PAGE_RE.sub(lambda m: 'href="' + ('./' if m.group(1) == 'index' else m.group(1)), html)
+    if absolute:
+        # Page 404 : servie à n'importe quelle adresse, donc liens et fichiers en chemin absolu
+        html = re.sub(r'(href|src)="(?!https?:|tel:|mailto:|#|/)(\./)?', r'\1="/', html)
+    path = os.path.join(ROOT, name)
+    old = open(path, encoding='utf-8').read() if os.path.exists(path) else ''
+    strip = lambda t: re.sub(r'\?v=[0-9-]+', '', t)
+    CHANGED[name] = strip(old) != strip(html)
+    with open(path, 'w', encoding='utf-8') as f:
         f.write(html)
     print('écrit', name, len(html))
+
+
+def write_sitemap(pages):
+    """sitemap.xml : adresses sans .html ; la date ne change que si le contenu de la page a changé."""
+    path = os.path.join(ROOT, 'sitemap.xml')
+    old = open(path, encoding='utf-8').read() if os.path.exists(path) else ''
+    today = datetime.date.today().isoformat()
+    rows = []
+    for page in pages:
+        loc = BASE + clean_url(page)
+        prev = re.search(r'<loc>' + re.escape(loc) + r'</loc><lastmod>([0-9-]+)</lastmod>', old)
+        lastmod = prev.group(1) if prev and not CHANGED.get(page, True) else today
+        rows.append(f'  <url><loc>{loc}</loc><lastmod>{lastmod}</lastmod></url>')
+    xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + '\n'.join(rows) + '\n</urlset>\n'
+    with open(path, 'w', encoding='utf-8') as f:
+        f.write(xml)
+    print('écrit sitemap.xml', len(rows), 'pages')
 
 
 # ---------------------------------------------------------------------------
@@ -361,7 +398,7 @@ def page_index():
             <p>{sv['short']}</p>
             <span class="service-more" aria-hidden="true">En savoir plus {ico('i-arrow')}</span>
           </li>'''
-    html = head('Alphanet Group | Nettoyage professionnel à Montpellier, Hérault (34)',
+    html = head('Entreprise de nettoyage à Montpellier, Hérault (34) | Alphanet Group',
                 'Nettoyage de bureaux, hôtels, copropriétés et commerces depuis 2014, principalement dans l’Hérault (34), en Occitanie et dans le Sud. Devis gratuit au 07 58 34 04 07.',
                 'index.html', jsonld=JSONLD)
     html += header('index.html')
@@ -507,7 +544,7 @@ def page_entreprise():
             <h3 class="h3">{t}</h3>
             <p>{p}</p>
           </li>''' for n, t, p in steps)
-    html = head('Notre entreprise | Alphanet Group',
+    html = head('Notre entreprise de nettoyage à Montpellier depuis 2014 | Alphanet Group',
                 'Alphanet Group, entreprise de nettoyage professionnel créée en 2014 à Montpellier, active dans l’Hérault (34), en Occitanie et dans le Sud : histoire, valeurs, méthode.',
                 'entreprise.html')
     html += header('entreprise.html')
@@ -633,7 +670,7 @@ def page_services():
         </article>'''
     quicknav = '\n        <nav aria-label="Aller à un service"><ul class="quicknav">' + quick + '</ul></nav>'
     hero = page_hero('Nos services', 'Des prestations de nettoyage pour les professionnels, principalement dans l’Hérault (34), mais aussi partout en Occitanie et dans les autres régions du Sud, en interventions régulières ou ponctuelles, en journée ou en horaires décalés.', 'Services', extra=quicknav)
-    html = head('Nettoyage bureaux, hôtellerie, copropriétés | Alphanet Group',
+    html = head('Nettoyage de bureaux, hôtels et copropriétés à Montpellier | Alphanet Group',
                 'Nettoyage de bureaux, hôtellerie, copropriétés, commerces, vitrerie, remise en état et après sinistre, dans l’Hérault (34), en Occitanie et dans le Sud.',
                 'services.html')
     html += header('services.html')
@@ -679,7 +716,7 @@ def page_engagements():
             <ul class="checks">{lis}
             </ul>
           </article>'''
-    html = head('Nos engagements | Alphanet Group',
+    html = head('Nos engagements : qualité, équipes stables, environnement | Alphanet Group',
                 'Service suivi, équipes stables et formées, respect de l’environnement, confidentialité : les engagements d’Alphanet Group, entreprise de nettoyage dans l’Hérault (34).',
                 'engagements.html')
     html += header('engagements.html')
@@ -712,7 +749,7 @@ def page_engagements():
 # Contact
 # ---------------------------------------------------------------------------
 def page_contact():
-    html = head('Contact et devis gratuit | Alphanet Group',
+    html = head('Devis gratuit de nettoyage à Montpellier et dans l’Hérault | Alphanet Group',
                 'Devis gratuit pour le nettoyage de vos bureaux, hôtel, copropriété ou commerce, dans l’Hérault (34), en Occitanie et dans le Sud. Appelez le 07 58 34 04 07 ou écrivez-nous.',
                 'contact.html')
     html += header('contact.html')
@@ -828,6 +865,34 @@ def page_legal():
     write('mentions-legales.html', html)
 
 
+# ---------------------------------------------------------------------------
+# Page introuvable (404) : sans elle, Cloudflare Pages renverrait l'accueil pour n'importe quelle adresse
+# ---------------------------------------------------------------------------
+def page_404():
+    html = head('Page introuvable | Alphanet Group',
+                'Cette page n’existe pas ou plus sur le site d’Alphanet Group.',
+                '404.html', robots='noindex')
+    html = html.replace('  <link rel="canonical" href="https://alphanet-group.fr/404">\n', '')
+    html += header('')
+    html += f'''
+  <main id="contenu">
+{page_hero('Page introuvable', 'Cette page n’existe pas ou a changé d’adresse. Voici où trouver ce que vous cherchez.', 'Page introuvable', soft=True)}
+    <section class="section">
+      <div class="container">
+        <ul class="quicknav">
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="services.html">Nos services</a></li>
+          <li><a href="entreprise.html">L’entreprise</a></li>
+          <li><a href="contact.html#formulaire">Demander un devis</a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+'''
+    html += footer(mobile_bar=False)
+    write('404.html', html, absolute=True)
+
+
 if __name__ == '__main__':
     page_index()
     page_entreprise()
@@ -835,3 +900,5 @@ if __name__ == '__main__':
     page_engagements()
     page_contact()
     page_legal()
+    page_404()
+    write_sitemap([p for p, _ in NAV])
