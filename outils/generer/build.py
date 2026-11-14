@@ -251,7 +251,7 @@ ZONE = '''<div class="zone">
           </div>''' % ico('i-pin')
 
 SERVICES = [
-    dict(id='bureaux', key='bureaux', icon='i-office', name='Bureaux et locaux professionnels', featured=True,
+    dict(h='Nettoyage de bureaux et locaux professionnels', id='bureaux', key='bureaux', icon='i-office', name='Bureaux et locaux professionnels', featured=True,
          short='Espaces de travail, salles de réunion, sanitaires et espaces de pause, à la fréquence qui vous convient.',
          intro='Un environnement de travail propre, c’est du confort pour vos équipes et une bonne image pour vos visiteurs. Nous intervenons à la fréquence qui vous convient : tous les jours, plusieurs fois par semaine ou ponctuellement.',
          more='Avant la première intervention, nous convenons avec vous des tâches, des horaires et des consignes d’accès, pour que chaque passage se déroule sans gêner votre activité.',
@@ -261,7 +261,7 @@ SERVICES = [
                  'Espaces de pause et cuisines',
                  'Vidage des corbeilles et évacuation des déchets courants',
                  'Points de contact (poignées, interrupteurs, rampes) désinfectés régulièrement']),
-    dict(id='hotellerie', key='hotellerie', icon='i-hotel', name='Hôtellerie', featured=True,
+    dict(h='Nettoyage en hôtellerie', id='hotellerie', key='hotellerie', icon='i-hotel', name='Hôtellerie', featured=True,
          short='Chambres, réception et espaces communs : une propreté irréprochable pour l’expérience de vos clients.',
          intro='Dans un hôtel, la propreté se remarque dès l’arrivée et compte dans l’avis de chaque client. Nous entretenons vos chambres et vos espaces communs avec méthode, au rythme de vos arrivées et de vos départs.',
          more='Nous convenons avec vous des tâches, des horaires et des priorités (chambres à libérer, recouches, espaces communs), pour une organisation fluide avec vos équipes de réception.',
@@ -271,7 +271,7 @@ SERVICES = [
                  'Sanitaires des espaces communs',
                  'Vitres et parties vitrées',
                  'Interventions planifiées selon vos arrivées et vos départs']),
-    dict(id='coproprietes', key='coproprietes', icon='i-copro', name='Copropriétés',
+    dict(h='Entretien de copropriétés', id='coproprietes', key='coproprietes', icon='i-copro', name='Copropriétés',
          short='Halls, escaliers et parties communes, en lien direct avec votre syndic.',
          intro='Des parties communes propres valorisent l’immeuble et le quotidien des résidents. Nous travaillons en lien direct avec votre syndic ou votre conseil syndical, avec un interlocuteur unique pour toute la copropriété.',
          more='Le cahier des charges est écrit : vous savez ce qui est fait, à quelle fréquence, et vous pouvez nous signaler la moindre remarque.',
@@ -281,7 +281,7 @@ SERVICES = [
                  'Locaux poubelles et locaux à vélos',
                  'Vitres des parties communes',
                  'Passages réguliers selon le cahier des charges convenu']),
-    dict(id='commerces', key='commerces', icon='i-store', name='Commerces',
+    dict(h='Nettoyage de commerces et locaux commerciaux', id='commerces', key='commerces', icon='i-store', name='Commerces',
          short='Un cadre impeccable pour vos clients, avant l’ouverture ou après la fermeture.',
          intro='Pour un commerce, la propreté fait partie de l’accueil. Nous intervenons avant l’ouverture ou après la fermeture pour que vos clients trouvent un lieu impeccable, sans gêner votre activité.',
          more='Boutique, restaurant, salon, agence : nous adaptons les produits et les méthodes à vos surfaces et à vos contraintes.',
@@ -291,7 +291,7 @@ SERVICES = [
                  'Sanitaires clients et du personnel',
                  'Horaires décalés : avant l’ouverture, après la fermeture',
                  'Intervention régulière ou ponctuelle, selon vos besoins']),
-    dict(id='vitrerie', key='vitrerie', icon='i-window', name='Vitrerie',
+    dict(h='Vitrerie et nettoyage de vitres', id='vitrerie', key='vitrerie', icon='i-window', name='Vitrerie',
          short='Vitres, vitrines et cloisons vitrées, nettes et sans traces.',
          intro='Des vitres nettes laissent entrer la lumière et donnent une meilleure image de vos locaux. Nous nettoyons vos surfaces vitrées à l’intérieur comme à l’extérieur, à la fréquence de votre choix.',
          more='La vitrerie peut s’ajouter à un contrat d’entretien existant ou faire l’objet d’une intervention séparée.',
@@ -301,7 +301,7 @@ SERVICES = [
                  'Portes vitrées et garde-corps vitrés',
                  'Châssis et rebords de fenêtres',
                  'Finition sans traces']),
-    dict(id='remise-en-etat', key='remise-en-etat', icon='i-sparkle', name='Remise en état et après sinistre',
+    dict(h='Remise en état et nettoyage après sinistre', id='remise-en-etat', key='remise-en-etat', icon='i-sparkle', name='Remise en état et après sinistre',
          short='Après travaux, déménagement, dégât des eaux ou incendie : des locaux propres et prêts à servir.',
          intro='Après des travaux, un déménagement ou une longue inoccupation, mais aussi après un dégât des eaux, un incendie ou une inondation, vos locaux doivent être remis en état avant de servir à nouveau. Nous intervenons pour les nettoyer, les désinfecter et vous permettre de reprendre votre activité au plus vite.',
          more='Une visite préalable nous permet d’évaluer l’état des lieux et de vous remettre un devis précis. En cas d’urgence après un sinistre, appelez-nous directement au 07&nbsp;58&nbsp;34&nbsp;04&nbsp;07 : nous évaluons la situation avec vous et organisons l’intervention.',
@@ -398,8 +398,8 @@ def page_index():
             <p>{sv['short']}</p>
             <span class="service-more" aria-hidden="true">En savoir plus {ico('i-arrow')}</span>
           </li>'''
-    html = head('Entreprise de nettoyage à Montpellier, Hérault (34) | Alphanet Group',
-                'Nettoyage de bureaux, hôtels, copropriétés et commerces depuis 2014, principalement dans l’Hérault (34), en Occitanie et dans le Sud. Devis gratuit au 07 58 34 04 07.',
+    html = head('Entreprise de nettoyage à Montpellier (34) | Alphanet Group',
+                'Société de nettoyage à Montpellier depuis 2014 : bureaux, locaux commerciaux, hôtels et copropriétés, dans l’Hérault (34) et en Occitanie. Devis gratuit.',
                 'index.html', jsonld=JSONLD)
     html += header('index.html')
     html += f'''
@@ -413,8 +413,8 @@ def page_index():
       <div class="container hero-grid">
         <div class="hero-content">
           <p class="hero-eyebrow"><span class="dot" aria-hidden="true"></span>Nettoyage professionnel · Occitanie</p>
-          <h1 class="hero-title" id="hero-title">Des locaux impeccables, <span class="accent">en toute confiance.</span></h1>
-          <p class="hero-lead">Bureaux, hôtels, copropriétés et commerces&nbsp;: nous entretenons vos locaux depuis 2014, principalement dans l’Hérault et partout dans le Sud, avec des équipes stables et un interlocuteur unique.</p>
+          <h1 class="hero-title" id="hero-title">Entreprise de nettoyage à Montpellier, <span class="accent">des locaux impeccables.</span></h1>
+          <p class="hero-lead">Société de nettoyage et de propreté basée à Montpellier depuis 2014&nbsp;: bureaux, locaux commerciaux, hôtels et copropriétés, principalement dans l’Hérault et partout dans le Sud, avec des équipes stables et un interlocuteur unique.</p>
           <div class="hero-actions" data-hero-actions>
             <a class="btn btn-primary btn-lg" href="contact.html#formulaire">Demander un devis gratuit {ico('i-arrow', 'ico ico-arrow')}</a>
             <a class="btn btn-ghost btn-lg" href="{TEL}">{ico('i-phone')}{PHONE_HTML}</a>
@@ -438,7 +438,7 @@ def page_index():
         <div class="prose reveal">
           <p class="eyebrow">Notre mission</p>
           <h2 class="h2" id="mission-title">Des locaux propres, une équipe sur laquelle compter</h2>
-          <p>Depuis 2014, Alphanet Group entretient les bureaux, les hôtels, les copropriétés et les commerces principalement dans l’Hérault (34), mais aussi partout en Occitanie et dans les autres régions du Sud. Notre objectif&nbsp;: que vos locaux soient accueillants chaque jour, sans que vous ayez à vous en occuper.</p>
+          <p>Depuis 2014, Alphanet Group, entreprise de propreté montpelliéraine, entretient les bureaux, les locaux commerciaux, les hôtels et les parties communes de copropriété à Montpellier et sa métropole, principalement dans l’Hérault (34), mais aussi partout en Occitanie et dans les autres régions du Sud. Notre objectif&nbsp;: que vos locaux soient accueillants chaque jour, sans que vous ayez à vous en occuper.</p>
           <p>Un seul interlocuteur, des équipes stables, des horaires adaptés à votre activité&nbsp;: nous faisons simple pour que vous puissiez vous concentrer sur votre métier.</p>
           <a class="link-more" href="entreprise.html">Découvrir l’entreprise {ico('i-arrow')}</a>
         </div>
@@ -544,13 +544,13 @@ def page_entreprise():
             <h3 class="h3">{t}</h3>
             <p>{p}</p>
           </li>''' for n, t, p in steps)
-    html = head('Notre entreprise de nettoyage à Montpellier depuis 2014 | Alphanet Group',
+    html = head('Entreprise de propreté à Montpellier depuis 2014 | Alphanet Group',
                 'Alphanet Group, entreprise de nettoyage professionnel créée en 2014 à Montpellier, active dans l’Hérault (34), en Occitanie et dans le Sud : histoire, valeurs, méthode.',
                 'entreprise.html')
     html += header('entreprise.html')
     html += f'''
   <main id="contenu">
-{page_hero('Notre entreprise', 'Alphanet Group est une entreprise de nettoyage professionnel installée à Montpellier, au service des entreprises, des hôtels, des copropriétés et des commerces depuis 2014. Elle intervient principalement dans l’Hérault (34), mais aussi partout en Occitanie et dans les autres régions du Sud.', 'Entreprise')}
+{page_hero('Alphanet Group, entreprise de propreté à Montpellier', 'Alphanet Group est une entreprise de nettoyage professionnel installée à Montpellier, au service des entreprises, des hôtels, des copropriétés et des commerces depuis 2014. Elle intervient principalement dans l’Hérault (34), mais aussi partout en Occitanie et dans les autres régions du Sud.', 'Entreprise')}
     <!-- Histoire -->
     <section class="section" id="histoire" aria-labelledby="histoire-title">
       <div class="container split split--text-wide">
@@ -627,7 +627,7 @@ def page_entreprise():
         <div class="prose reveal">
           <p class="eyebrow">Où nous intervenons</p>
           <h2 class="h2" id="zone-title">L’Hérault d’abord, tout le Sud ensuite</h2>
-          <p>Depuis Montpellier, nos équipes interviennent principalement dans l’Hérault (34), notre secteur historique. Nous intervenons aussi partout en Occitanie et dans les autres régions du Sud de la France, auprès des entreprises, des hôtels, des copropriétés et des commerces.</p>
+          <p>Depuis Montpellier, nos équipes interviennent d’abord à Montpellier et dans sa métropole, puis dans tout l’Hérault (34), notre secteur historique. Nous intervenons aussi partout en Occitanie et dans les autres régions du Sud de la France, auprès des entreprises, des hôtels, des copropriétés et des commerces.</p>
           <a class="link-more" href="contact.html#formulaire">Demander un devis {ico('i-arrow')}</a>
         </div>
         <div class="bulle reveal zone-card">
@@ -657,7 +657,7 @@ def page_services():
         <article class="svc{flip}" id="{sv['id']}" aria-labelledby="{sv['id']}-title">
           <div class="svc-text reveal">
             {chip(sv['icon'])}
-            <h2 class="h2" id="{sv['id']}-title">{sv['name']}</h2>
+            <h2 class="h2" id="{sv['id']}-title">{sv['h']}</h2>
             <p>{sv['intro']}</p>
             <p>{sv['more']}</p>
             <a class="btn btn-primary" href="contact.html?prestation={sv['key']}#formulaire">Demander un devis {ico('i-arrow', 'ico ico-arrow')}</a>
@@ -669,9 +669,9 @@ def page_services():
           </div>
         </article>'''
     quicknav = '\n        <nav aria-label="Aller à un service"><ul class="quicknav">' + quick + '</ul></nav>'
-    hero = page_hero('Nos services', 'Des prestations de nettoyage pour les professionnels, principalement dans l’Hérault (34), mais aussi partout en Occitanie et dans les autres régions du Sud, en interventions régulières ou ponctuelles, en journée ou en horaires décalés.', 'Services', extra=quicknav)
-    html = head('Nettoyage de bureaux, hôtels et copropriétés à Montpellier | Alphanet Group',
-                'Nettoyage de bureaux, hôtellerie, copropriétés, commerces, vitrerie, remise en état et après sinistre, dans l’Hérault (34), en Occitanie et dans le Sud.',
+    hero = page_hero('Nos services de nettoyage à Montpellier', 'Des prestations de nettoyage pour les professionnels, principalement dans l’Hérault (34), mais aussi partout en Occitanie et dans les autres régions du Sud, en interventions régulières ou ponctuelles, en journée ou en horaires décalés.', 'Services', extra=quicknav)
+    html = head('Nettoyage de bureaux et copropriétés à Montpellier | Alphanet Group',
+                'Nettoyage de bureaux et locaux commerciaux, entretien de copropriété, hôtellerie, vitrerie, remise en état : à Montpellier, dans l’Hérault (34) et en Occitanie.',
                 'services.html')
     html += header('services.html')
     html += f'''
@@ -722,7 +722,7 @@ def page_engagements():
     html += header('engagements.html')
     html += f'''
   <main id="contenu">
-{page_hero('Nos engagements', 'Ce que nous vous promettons, et la façon dont nous le tenons au quotidien.', 'Engagements')}
+{page_hero('Nos engagements de propreté', 'Ce que nous vous promettons, et la façon dont nous le tenons au quotidien.', 'Engagements')}
     <section class="section" aria-label="Nos quatre engagements">
       <div class="container">
         <div class="engage-grid">{cards}
@@ -749,13 +749,13 @@ def page_engagements():
 # Contact
 # ---------------------------------------------------------------------------
 def page_contact():
-    html = head('Devis gratuit de nettoyage à Montpellier et dans l’Hérault | Alphanet Group',
-                'Devis gratuit pour le nettoyage de vos bureaux, hôtel, copropriété ou commerce, dans l’Hérault (34), en Occitanie et dans le Sud. Appelez le 07 58 34 04 07 ou écrivez-nous.',
+    html = head('Devis nettoyage gratuit à Montpellier | Alphanet Group',
+                'Devis gratuit pour le nettoyage de vos bureaux, locaux commerciaux, hôtel ou copropriété à Montpellier et dans l’Hérault (34). Appelez le 07 58 34 04 07.',
                 'contact.html')
     html += header('contact.html')
     html += f'''
   <main id="contenu">
-{page_hero('Contact et devis gratuit', 'Décrivez votre besoin&nbsp;: nous organisons une visite et vous remettons un devis gratuit, sans engagement.', 'Contact', soft=True)}
+{page_hero('Devis gratuit de nettoyage à Montpellier', 'Décrivez votre besoin&nbsp;: nous organisons une visite et vous remettons un devis gratuit, sans engagement.', 'Contact', soft=True)}
     <section class="section section--form" id="formulaire" aria-label="Demande de devis">
       <div class="container contact-grid">
         <div class="contact-intro reveal">

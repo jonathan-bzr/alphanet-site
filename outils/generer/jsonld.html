@@ -6,7 +6,7 @@
         "@type": "LocalBusiness",
         "@id": "https://alphanet-group.fr/#entreprise",
         "name": "Alphanet Group",
-        "alternateName": ["Alphanet", "Alphanet Propreté et Services", "Alphanet Nettoyage Montpellier"],
+        "alternateName": ["Alphanet", "Alphanet Montpellier", "Alphanet Nettoyage", "Alphanet Propreté et Services", "Alphanet Nettoyage Montpellier"],
         "legalName": "ALPHANET PROPRETE ET SERVICES",
         "description": "Entreprise de nettoyage professionnel créée en 2014 à Montpellier : bureaux et locaux professionnels, hôtellerie, copropriétés, commerces, vitrerie, remise en état et après sinistre, principalement dans l’Hérault (34), mais aussi partout en Occitanie et dans les autres régions du Sud.",
         "url": "https://alphanet-group.fr/",
@@ -16,6 +16,14 @@
         "foundingDate": "2014-04-10",
         "vatID": "FR33801134065",
         "priceRange": "Devis gratuit",
+        "slogan": "Entreprise de nettoyage à Montpellier, des locaux impeccables.",
+        "openingHoursSpecification": {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+          "opens": "00:00",
+          "closes": "23:59"
+        },
+        "knowsAbout": ["Société de nettoyage", "Entreprise de propreté", "Nettoyage de bureaux", "Nettoyage de locaux commerciaux", "Entretien de copropriété", "Nettoyage en hôtellerie", "Vitrerie", "Remise en état", "Nettoyage après sinistre"],
         "address": {
           "@type": "PostalAddress",
           "addressLocality": "Montpellier",
@@ -24,6 +32,8 @@
           "addressCountry": "FR"
         },
         "areaServed": [
+          { "@type": "City", "name": "Montpellier" },
+          { "@type": "AdministrativeArea", "name": "Montpellier Méditerranée Métropole" },
           { "@type": "AdministrativeArea", "name": "Hérault (34)" },
           { "@type": "AdministrativeArea", "name": "Occitanie" },
           { "@type": "Place", "name": "Sud de la France" }
@@ -32,10 +42,10 @@
           "@type": "OfferCatalog",
           "name": "Services de nettoyage professionnel",
           "itemListElement": [
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Nettoyage de bureaux et locaux professionnels" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Nettoyage de bureaux et locaux professionnels à Montpellier" } },
             { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Nettoyage en hôtellerie" } },
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Entretien des parties communes de copropriétés" } },
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Nettoyage de commerces" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Entretien de copropriété à Montpellier" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Nettoyage de commerces et locaux commerciaux" } },
             { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Vitrerie" } },
             { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Remise en état et nettoyage après sinistre" } }
           ]
