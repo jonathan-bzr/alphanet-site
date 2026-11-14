@@ -398,7 +398,7 @@ def page_index():
             <p>{sv['short']}</p>
             <span class="service-more" aria-hidden="true">En savoir plus {ico('i-arrow')}</span>
           </li>'''
-    html = head('Entreprise de nettoyage à Montpellier (34) | Alphanet Group',
+    html = head('Alphanet Group | Entreprise de nettoyage à Montpellier (34)',
                 'Société de nettoyage à Montpellier depuis 2014 : bureaux, locaux commerciaux, hôtels et copropriétés, dans l’Hérault (34) et en Occitanie. Devis gratuit.',
                 'index.html', jsonld=JSONLD)
     html += header('index.html')
